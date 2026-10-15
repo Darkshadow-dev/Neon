@@ -67,3 +67,11 @@ This is a substantial playable v3 foundation, not a professionally balanced rele
 - Dash Wraith dashes with Shift on PC or the DASH touch button. It dashes in the current movement direction, or toward its facing direction if standing still.
 - Buttons and combat controls disable text selection during mouse/touch play.
 - Ball collisions with projectiles, laser beams and moving ships impart directional momentum; impacts can knock the ball loose from a carrier.
+
+## v3.0.2 gameplay fixes
+- Phantom Laser beams now remain visible long enough to render and resolve damage only once per shot.
+- Reactor Warden has 160 HP and slightly improved speed; Dash Wraith has 65 HP, a 4-shot magazine, lower speed and two rechargeable dash charges.
+- Added kill feed, after-action report (kills, deaths, matches played, match duration, score and damage dealt), host skip after 5 seconds, and automatic report close after 20 seconds.
+- Rooms with bot fill enabled can accept players during a live match by replacing a bot. The incoming player chooses a ship and readies before taking control.
+- Leave button is locked for 20 seconds after joining and again when a match starts.
+- Destructible walls visibly change color and show cracks as their durability falls; labyrinth geometry has been revised.
