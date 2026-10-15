@@ -2,10 +2,13 @@
 "use strict";
 const $ = id => document.getElementById(id);
 const canvas = $("game"), ctx = canvas.getContext("2d");
-let ws = null, roomCode = "", mode = "1v1", slot = 0, team = 1, weapon = "bolt";
+let ws = null, roomCode = "", mode = "1v1", slot = 0, team = 1, ship = "bolt", ready = false;
 let world = { width: 1000, height: 620 };
 let snapshot = { state: "lobby", players: [], bullets: [], pickups: [] };
 let held = { up: false, down: false, left: false, right: false };
+const manualHeld = { up: false, down: false, left: false, right: false };
+const tiltHeld = { up: false, down: false, left: false, right: false };
+let tiltEnabled = false, tiltBase = null;
 let stars = [], w = 800, h = 496, dpr = 1, chargeStart = 0, charging = false, lastCharge = 0;
 let keyFireStart = 0;
 function serverAddress() {
@@ -31,27 +34,37 @@ function connectSocket(onReady) {
     let m; try { m = JSON.parse(event.data); } catch { return; }
     if (m.type === "error") { showError(m.message); $("message").textContent = m.message; return; }
     if (m.type === "welcome") {
-      slot = m.slot; team = m.team; roomCode = m.code; mode = m.mode;
+      slot = m.slot; team = m.team; roomCode = m.code; mode = m.mode; ship = m.ship || "bolt";
       $("roomTitle").innerHTML = `ROOM <span>${roomCode}</span>`;
       $("modeBadge").textContent = mode.toUpperCase();
       $("lobby").classList.add("hidden"); $("gameShell").classList.remove("hidden");
-      showError(""); resize();
+      $("shipPicker").classList.remove("hidden");
+      showError(""); selectShipCard(ship); resize();
     }
     if (m.type === "room") {
       roomCode = m.code; mode = m.mode;
       $("roomTitle").innerHTML = `ROOM <span>${roomCode}</span>`;
       $("modeBadge").textContent = mode.toUpperCase();
       $("playersCount").textContent = `${m.players.length} / ${m.maxPlayers} PILOTS`;
-      const blue = m.players.filter(p => p.team === 1).map(p => p.name);
-      const red = m.players.filter(p => p.team === 2).map(p => p.name);
+      const blue = m.players.filter(p => p.team === 1).map(p => `${p.name} [${p.ship === "laser" ? "LASER" : "BOLT"}]`);
+      const red = m.players.filter(p => p.team === 2).map(p => `${p.name} [${p.ship === "laser" ? "LASER" : "BOLT"}]`);
       $("blueRoster").textContent = blue.join(" · ") || "Waiting for pilots";
       $("redRoster").textContent = red.join(" · ") || "Waiting for rivals";
+      const mine = m.players.find(p => p.slot === slot);
+      if (mine) {
+        ship = mine.ship || ship; ready = !!mine.ready; selectShipCard(ship);
+        $("shipStatus").textContent = ready ? "READY — waiting for the other pilots." : "Choose a frame, then ready up.";
+        $("readyButton").textContent = ready ? "CANCEL READY" : "READY UP ↗";
+      }
+      const canChoose = m.state === "lobby";
+      $("shipPicker").classList.toggle("hidden", !canChoose);
     }
     if (m.type === "status") {
       $("state").textContent = (m.state || "lobby").toUpperCase();
       $("message").textContent = m.message || "";
       $("overlayTitle").textContent = m.state === "playing" ? "COMBAT LIVE" : m.state === "ended" ? "ROUND COMPLETE" : "ROOM READY";
       $("overlay").classList.toggle("hidden", m.state === "playing");
+      $("shipPicker").classList.toggle("hidden", m.state !== "lobby");
       $("restart").classList.toggle("hidden", !(m.state === "ended" && slot === 1));
     }
     if (m.type === "state") {
@@ -59,14 +72,17 @@ function connectSocket(onReady) {
       $("state").textContent = (m.state || "lobby").toUpperCase();
       const me = m.players.find(p => p.slot === slot);
       if (me) {
-        $("hpText").textContent = `${Math.ceil(me.hp)} HP`;
-        $("hpBar").style.width = `${Math.max(0, me.hp)}%`;
+        $("hpText").textContent = `${Math.ceil(me.hp)} / ${me.maxHp} HP`;
+        $("hpBar").style.width = `${Math.max(0, me.hp / me.maxHp * 100)}%`;
+        $("weaponName").textContent = me.ship === "laser" ? "PHANTOM LASER" : "BOLT CANNON";
+        $("weaponDescription").textContent = me.ship === "laser" ? "Low hull. Burns targets over time; full charge is lethal." : "Strong hull. Fast bolts deal 18–43 damage when charged.";
         $("shieldBar").style.width = `${Math.min(100, me.shield / 60 * 100)}%`;
         $("myLabel").textContent = me.name.toUpperCase();
         $("boostText").textContent = me.damageBoost > 0 ? `DAMAGE BOOST ${me.damageBoost.toFixed(1)}s` : me.shield > 0 ? `SHIELD ${Math.ceil(me.shield)}` : "NO BOOST";
         $("ammo").innerHTML = "● ".repeat(me.ammo) + "○ ".repeat(6 - me.ammo) + `<small>${me.ammo}/6</small>`;
       }
       $("overlay").classList.toggle("hidden", m.state === "playing");
+      $("shipPicker").classList.toggle("hidden", m.state !== "lobby");
       if (m.state === "ended") {
         $("overlayTitle").textContent = m.winner === team ? "VICTORY" : "DEFEAT";
         $("message").textContent = mode === "1v1" ? `PLAYER ${m.winner} WINS` : `TEAM ${m.winner} WINS`;
@@ -81,7 +97,7 @@ function connectSocket(onReady) {
       $("overlayTitle").textContent = "CONNECTION LOST";
       $("message").textContent = "Reconnect to the server and create or join a room again.";
     }
-    Object.keys(held).forEach(k => held[k] = false);
+    Object.keys(held).forEach(k => { held[k] = false; manualHeld[k] = false; tiltHeld[k] = false; });
   };
   ws.onerror = () => { setConnection("CONNECTION ERROR", false); showError("Cannot reach game server. Try again."); };
 }
@@ -105,6 +121,72 @@ $("roomCode").addEventListener("keydown", e => { if (e.key === "Enter") joinRoom
 document.querySelectorAll("[data-mode]").forEach(b => b.addEventListener("click", () => {
   mode = b.dataset.mode; document.querySelectorAll("[data-mode]").forEach(x => x.classList.toggle("selected", x === b));
 }));
+function selectShipCard(type) {
+  ship = type === "laser" ? "laser" : "bolt";
+  document.querySelectorAll("[data-ship]").forEach(card => card.classList.toggle("selected", card.dataset.ship === ship));
+}
+document.querySelectorAll("[data-ship]").forEach(card => {
+  card.addEventListener("click", () => {
+    if (ready) return;
+    selectShipCard(card.dataset.ship);
+    send({ type: "chooseShip", ship });
+    $("shipStatus").textContent = `${ship === "laser" ? "PHANTOM LASER" : "BOLT RUNNER"} selected. Press READY UP.`;
+  });
+});
+$("readyButton").addEventListener("click", () => {
+  ready = !ready;
+  send({ type: "ready", ready });
+  $("readyButton").textContent = ready ? "CANCEL READY" : "READY UP ↗";
+  $("shipStatus").textContent = ready ? "READY — waiting for the other pilots." : "Not ready. Choose your frame.";
+});
+$("fullscreen").addEventListener("click", async () => {
+  try {
+    if (!document.fullscreenElement) {
+      const target = document.documentElement;
+      if (target.requestFullscreen) await target.requestFullscreen();
+      if (screen.orientation && screen.orientation.lock) screen.orientation.lock("landscape").catch(() => {});
+      $("fullscreen").textContent = "EXIT FULL";
+    } else {
+      await document.exitFullscreen();
+      $("fullscreen").textContent = "FULLSCREEN";
+    }
+  } catch { $("fullscreen").textContent = "USE BROWSER FULLSCREEN"; }
+});
+document.addEventListener("fullscreenchange", () => {
+  $("fullscreen").textContent = document.fullscreenElement ? "EXIT FULL" : "FULLSCREEN";
+  setTimeout(resize, 150);
+});
+async function enableTilt() {
+  if (typeof DeviceOrientationEvent === "undefined") { $("tiltToggle").textContent = "TILT UNSUPPORTED"; return; }
+  try {
+    if (typeof DeviceOrientationEvent.requestPermission === "function") {
+      const permission = await DeviceOrientationEvent.requestPermission();
+      if (permission !== "granted") throw new Error("Motion permission denied");
+    }
+    tiltEnabled = true; tiltBase = null;
+    $("tiltToggle").textContent = "TILT: ON";
+    window.addEventListener("deviceorientation", onTilt, true);
+  } catch { $("tiltToggle").textContent = "TILT BLOCKED"; }
+}
+function onTilt(event) {
+  if (!tiltEnabled || event.gamma == null || event.beta == null) return;
+  if (!tiltBase) { tiltBase = { gamma: event.gamma, beta: event.beta }; return; }
+  const gx = event.gamma - tiltBase.gamma, by = event.beta - tiltBase.beta;
+  tiltHeld.left = gx < -8; tiltHeld.right = gx > 8;
+  tiltHeld.up = by < -8; tiltHeld.down = by > 8;
+  Object.keys(held).forEach(k => held[k] = manualHeld[k] || tiltHeld[k]);
+  sendInput();
+}
+$("tiltToggle").addEventListener("click", () => {
+  if (tiltEnabled) {
+    tiltEnabled = false; tiltBase = null;
+    window.removeEventListener("deviceorientation", onTilt, true);
+    Object.keys(tiltHeld).forEach(k => tiltHeld[k] = false);
+    Object.keys(held).forEach(k => held[k] = manualHeld[k]);
+    $("tiltToggle").textContent = "TILT: OFF"; sendInput();
+  } else enableTilt();
+});
+
 $("copyCode").addEventListener("click", async () => {
   try { await navigator.clipboard.writeText(roomCode); $("copyCode").textContent = "COPIED!"; }
   catch { $("copyCode").textContent = roomCode; }
@@ -118,13 +200,10 @@ $("leaveRoom").addEventListener("click", () => {
   setConnection("OFFLINE", false);
 });
 $("restart").addEventListener("click", () => send({ type: "restart" }));
-document.querySelectorAll("[data-weapon]").forEach(b => b.addEventListener("click", () => {
-  weapon = b.dataset.weapon;
-  document.querySelectorAll("[data-weapon]").forEach(x => x.classList.toggle("selected", x === b));
-}));
 function sendInput() { send({ type: "input", input: held }); }
 function setMove(key, value, button) {
-  held[key] = value;
+  manualHeld[key] = value;
+  held[key] = manualHeld[key] || tiltHeld[key];
   if (button) button.classList.toggle("active", value);
   sendInput();
 }
@@ -152,7 +231,7 @@ function releaseCharge(e) {
   charging = false;
   const charge = Math.max(0, Math.min(1, (performance.now() - chargeStart) / 1400));
   lastCharge = charge;
-  send({ type: "shoot", weapon, charge });
+  send({ type: "shoot", charge });
   $("fire").classList.remove("charging");
   $("chargeText").textContent = charge > .75 ? "MAX SHOT" : charge > .25 ? "CHARGED" : "QUICK SHOT";
   $("chargeBar").style.width = "0%";
@@ -175,7 +254,7 @@ window.addEventListener("keyup", e => {
   }
 });
 window.addEventListener("blur", () => {
-  Object.keys(held).forEach(k => held[k] = false);
+  Object.keys(held).forEach(k => { held[k] = false; manualHeld[k] = false; tiltHeld[k] = false; });
   document.querySelectorAll(".active").forEach(b => b.classList.remove("active"));
   sendInput();
   if (charging) releaseCharge();
@@ -196,9 +275,18 @@ function roundedShip(p, x, y, scale) {
   const color = p.team === 1 ? "#54f4ff" : "#ff4d9d";
   ctx.shadowBlur = 18; ctx.shadowColor = color; ctx.strokeStyle = color; ctx.lineWidth = 1.8;
   ctx.fillStyle = p.alive ? (p.team === 1 ? "#0d3447" : "#3a142d") : "#293147";
-  ctx.beginPath(); ctx.moveTo(24,0); ctx.lineTo(6,-9); ctx.lineTo(-8,-17); ctx.lineTo(-5,-5); ctx.lineTo(-14,0); ctx.lineTo(-5,5); ctx.lineTo(-8,17); ctx.lineTo(6,9); ctx.closePath(); ctx.fill(); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(8,0); ctx.lineTo(-5,-4); ctx.lineTo(-3,0); ctx.lineTo(-5,4); ctx.closePath(); ctx.fillStyle = color; ctx.fill();
-  ctx.strokeStyle = "#d8fbff"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(-8,-7); ctx.lineTo(-17,-12); ctx.moveTo(-8,7); ctx.lineTo(-17,12); ctx.stroke();
+  ctx.beginPath();
+  if (p.ship === "laser") {
+    ctx.moveTo(27,0); ctx.lineTo(5,-5); ctx.lineTo(-3,-13); ctx.lineTo(-1,-4); ctx.lineTo(-18,-9); ctx.lineTo(-11,0); ctx.lineTo(-18,9); ctx.lineTo(-1,4); ctx.lineTo(-3,13); ctx.lineTo(5,5); ctx.closePath();
+  } else {
+    ctx.moveTo(24,0); ctx.lineTo(6,-9); ctx.lineTo(-8,-17); ctx.lineTo(-5,-5); ctx.lineTo(-14,0); ctx.lineTo(-5,5); ctx.lineTo(-8,17); ctx.lineTo(6,9); ctx.closePath();
+  }
+  ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(p.ship === "laser" ? 14 : 8,0); ctx.lineTo(-5,-4); ctx.lineTo(-3,0); ctx.lineTo(-5,4); ctx.closePath(); ctx.fillStyle = color; ctx.fill();
+  ctx.strokeStyle = "#d8fbff"; ctx.lineWidth = 1; ctx.beginPath();
+  if (p.ship === "laser") { ctx.moveTo(-3,-6); ctx.lineTo(-14,-15); ctx.moveTo(-3,6); ctx.lineTo(-14,15); }
+  else { ctx.moveTo(-8,-7); ctx.lineTo(-17,-12); ctx.moveTo(-8,7); ctx.lineTo(-17,12); }
+  ctx.stroke();
   if (p.shield > 0) {
     ctx.rotate(-(p.angle || 0)); ctx.strokeStyle = "#8291ff"; ctx.globalAlpha = .5 + Math.sin(performance.now()/100)*.2; ctx.lineWidth = 2;
     ctx.beginPath(); ctx.arc(0,0,27,0,Math.PI*2); ctx.stroke();
@@ -228,7 +316,7 @@ function draw() {
   for(const p of snapshot.players||[]){
     const x=p.x/world.width*w,y=p.y/world.height*h;roundedShip(p,x,y,Math.min(1,w/800));
     ctx.save();ctx.font="700 10px Orbitron";ctx.textAlign="center";ctx.fillStyle=p.team===1?"#8ffaff":"#ff9cc8";ctx.fillText(p.name||`P${p.slot}`,x,y-28);
-    ctx.fillStyle="#25304a";ctx.fillRect(x-20,y-23,40,3);ctx.fillStyle=p.team===1?"#54f4ff":"#ff4d9d";ctx.fillRect(x-20,y-23,40*Math.max(0,p.hp/100),3);ctx.restore();
+    ctx.fillStyle="#25304a";ctx.fillRect(x-20,y-23,40,3);ctx.fillStyle=p.team===1?"#54f4ff":"#ff4d9d";ctx.fillRect(x-20,y-23,40*Math.max(0,p.hp/(p.maxHp||100)),3);ctx.restore();
   }
 }
 function loop() {

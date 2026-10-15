@@ -47,13 +47,30 @@
   <section id="gameShell" class="game-shell hidden">
     <div class="game-heading panel">
       <div><div class="eyebrow">ACTIVE COMBAT ZONE</div><h2 id="roomTitle">ROOM <span>------</span></h2></div>
-      <div class="room-actions"><span id="modeBadge" class="badge">1V1</span><button id="copyCode" class="small-button">COPY CODE</button><button id="leaveRoom" class="small-button danger">LEAVE</button></div>
+      <div class="room-actions"><span id="modeBadge" class="badge">1V1</span><button id="tiltToggle" class="small-button">TILT: OFF</button><button id="fullscreen" class="small-button">FULLSCREEN</button><button id="copyCode" class="small-button">COPY CODE</button><button id="leaveRoom" class="small-button danger">LEAVE</button></div>
     </div>
     <div class="team-strip">
       <div class="team-card blue-team"><b>◆ YOUR SQUAD</b><span id="blueRoster">Waiting for pilots</span></div>
       <div class="round-state"><i></i><span id="state">LOBBY</span><small id="playersCount">1 / 2 PILOTS</small></div>
       <div class="team-card pink-team"><b>◆ RIVAL SQUAD</b><span id="redRoster">Waiting for rivals</span></div>
     </div>
+    <section id="shipPicker" class="ship-picker panel">
+      <div class="ship-picker-heading"><div><div class="eyebrow">PILOT LOADOUT</div><h3>CHOOSE YOUR <span>SHIP</span></h3></div><small>SWIPE SIDEWAYS TO COMPARE</small></div>
+      <div class="ship-cards" id="shipCards">
+        <button class="ship-card selected" data-ship="bolt" type="button">
+          <span class="ship-number">FRAME 01</span><strong>BOLT RUNNER</strong><span class="ship-preview bolt-preview">➤</span>
+          <span class="ship-description">Armoured and reliable. Fires fast energy bolts.</span>
+          <span class="ship-stats"><span>HULL <b>100 HP</b></span><span>SHOT <b>18–43 DMG</b></span></span>
+        </button>
+        <button class="ship-card" data-ship="laser" type="button">
+          <span class="ship-number">FRAME 02</span><strong>PHANTOM LASER</strong><span class="ship-preview laser-preview">⟿</span>
+          <span class="ship-description">Fragile frame. Laser burns over time; a full charge can destroy a ship instantly.</span>
+          <span class="ship-stats"><span>HULL <b>72 HP</b></span><span>SHOT <b>LOW + BURN</b></span></span>
+        </button>
+      </div>
+      <div class="ship-ready-row"><span id="shipStatus">Choose a frame, then ready up.</span><button id="readyButton" class="primary ready-button">READY UP ↗</button></div>
+    </section>
+
     <div class="arena-wrap panel">
       <canvas id="game"></canvas>
       <div id="overlay" class="overlay">
@@ -67,7 +84,7 @@
     </div>
     <div class="combat-hud">
       <div class="pilot-hud"><div class="hud-label"><span id="myLabel">YOUR SHIP</span><b id="hpText">100 HP</b></div><div class="meter"><i id="hpBar"></i></div><div class="shield-meter"><span>SHIELD</span><i id="shieldBar"></i></div></div>
-      <div class="weapon-hud"><span class="hud-caption">WEAPON SYSTEM</span><div class="weapon-switch"><button class="weapon selected" data-weapon="bolt">⚡ BOLT</button><button class="weapon" data-weapon="laser">╱ LASER</button></div><div class="ammo" id="ammo">● ● ● ● ● ● <small>6/6</small></div><small class="ammo-note">ONE ROUND RECHARGES / SEC</small></div>
+      <div class="weapon-hud"><span class="hud-caption">YOUR SHIP WEAPON</span><b id="weaponName" class="weapon-name">BOLT CANNON</b><small id="weaponDescription" class="weapon-description">Charge and release to fire a fast projectile.</small><div class="ammo" id="ammo">● ● ● ● ● ● <small>6/6</small></div><small class="ammo-note">ONE ROUND RECHARGES / SEC</small></div>
       <div class="boost-hud"><span class="hud-caption">PICKUP EFFECT</span><b id="boostText">NO BOOST</b><small>▰ SHIELD BLOCKS DAMAGE<br>✦ BOOST AMPLIFIES SHOTS</small></div>
     </div>
     <section class="mobile-controls">
@@ -80,7 +97,7 @@
       </div>
       <div class="fire-area"><div class="charge-readout"><span>CHARGE</span><b id="chargeText">READY</b></div><button id="fire" class="fire-button"><span class="fire-core">✦</span><b>HOLD TO CHARGE</b><small>RELEASE TO FIRE</small><i id="chargeBar"></i></button></div>
     </section>
-    <div class="controls-hint">MOVE: ARROWS / WASD · FIRE: HOLD + RELEASE · SPACE: CHARGE SHOT · TOUCH CONTROLS SUPPORTED</div>
+    <div class="controls-hint">MOVE: TILT PHONE OR PRESS ARROWS · FIRE: HOLD + RELEASE · SPACE: CHARGE SHOT</div>
   </section>
   <footer class="site-footer"><span>NEON DUEL // ONLINE</span><span>SERVER-AUTHORITATIVE COMBAT</span><span>PLAY FAIR. FLY FAST.</span></footer>
 </main>

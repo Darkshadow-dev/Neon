@@ -69,16 +69,18 @@ function makeRoom(mode) {
   rooms.set(roomCode, room);
   return room;
 }
-function makePlayer(slot, name, mode) {
+function makePlayer(slot, name, mode, ship = "bolt") {
   const team = mode === "1v1" ? (slot === 1 ? 1 : 2) : (slot <= 2 ? 1 : 2);
   const startX = team === 1 ? 160 : WORLD.width - 160;
   const startY = slot % 2 === 1 ? WORLD.height * 0.36 : WORLD.height * 0.64;
+  const shipType = ship === "laser" ? "laser" : "bolt";
+  const maxHp = shipType === "laser" ? 72 : 100;
   return {
-    slot, id: slot, name, team, x: startX, y: startY,
+    slot, id: slot, name, team, ship: shipType, x: startX, y: startY,
     vx: 0, vy: 0, angle: team === 1 ? 0 : Math.PI,
-    hp: 100, maxHp: 100, shield: 0, damageBoost: 0,
+    hp: maxHp, maxHp, shield: 0, damageBoost: 0,
     ammo: 6, ammoClock: 0, alive: true, input: {},
-    lastShot: 0, respawnAt: 0
+    lastShot: 0, burn: 0, burnDps: 0, burnTeam: 0
   };
 }
 function status(room, message) {
@@ -97,7 +99,7 @@ function lobbyInfo(room) {
     mode: room.mode,
     state: room.state,
     maxPlayers: room.maxPlayers,
-    players: room.players.map(p => ({ slot: p.slot, name: p.name, team: p.team }))
+    players: room.players.map(p => ({ slot: p.slot, name: p.name, team: p.team, ship: p.ship, ready: !![...room.clients.values()].find(c => c.slot === p.slot)?.ready, hp: p.maxHp, damage: p.ship === "laser" ? "8 + burn" : "18–43" }))
   };
 }
 function syncLobby(room) {
@@ -105,13 +107,13 @@ function syncLobby(room) {
 }
 function resetRound(room) {
   room.players.forEach(p => {
-    const fresh = makePlayer(p.slot, p.name, room.mode);
+    const fresh = makePlayer(p.slot, p.name, room.mode, p.ship);
     Object.assign(p, fresh);
   });
   room.bullets = [];
   room.pickups = [];
   room.winner = null;
-  room.state = room.clients.size === room.maxPlayers ? "playing" : "lobby";
+  room.state = room.clients.size === room.maxPlayers && [...room.clients.values()].every(c => c.ready) ? "playing" : "lobby";
   room.lastPickup = Date.now();
   for (const c of room.clients.values()) c.input = {};
   status(room, room.state === "playing" ? "All pilots ready — fight!" : "Waiting for pilots…");
@@ -122,7 +124,7 @@ function snap(room) {
     type: "state", code: room.code, mode: room.mode, state: room.state,
     winner: room.winner, world: WORLD,
     players: room.players.map(p => ({
-      id: p.id, slot: p.slot, name: p.name, team: p.team,
+      id: p.id, slot: p.slot, name: p.name, team: p.team, ship: p.ship,
       x: p.x, y: p.y, vx: p.vx, vy: p.vy, angle: p.angle,
       hp: p.hp, maxHp: p.maxHp, shield: p.shield,
       damageBoost: p.damageBoost, ammo: p.ammo, alive: p.alive
@@ -167,19 +169,18 @@ function segmentDistance(px, py, ax, ay, bx, by) {
   const t = Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / l2));
   return Math.hypot(px - (ax + t * dx), py - (ay + t * dy));
 }
-function fire(room, client, weapon, charge) {
+function fire(room, client, charge) {
   const p = room.players.find(x => x.slot === client.slot);
   if (!p || !p.alive || room.state !== "playing") return;
   const now = Date.now();
-  if (p.ammo <= 0 || now - p.lastShot < 160) return;
+  if (p.ammo <= 0 || now - p.lastShot < 220) return;
   p.lastShot = now;
   p.ammo--;
   const c = Math.max(0, Math.min(1, Number(charge) || 0));
   const boosted = p.damageBoost > 0;
-  const damageBase = (weapon === "laser" ? 12 : 14) + c * (weapon === "laser" ? 18 : 24);
-  const hitDamage = damageBase * (boosted ? 1.7 : 1);
-  if (weapon === "laser") {
-    const length = 760 + c * 120;
+  const color = p.team === 1 ? "#47f6ff" : "#ff4c9a";
+  if (p.ship === "laser") {
+    const length = 900;
     const ax = p.x + Math.cos(p.angle) * 24, ay = p.y + Math.sin(p.angle) * 24;
     const bx = ax + Math.cos(p.angle) * length, by = ay + Math.sin(p.angle) * length;
     let hit = null, hitDist = Infinity;
@@ -187,24 +188,32 @@ function fire(room, client, weapon, charge) {
       if (q.team === p.team || !q.alive) continue;
       const d = segmentDistance(q.x, q.y, ax, ay, bx, by);
       const along = (q.x - ax) * Math.cos(p.angle) + (q.y - ay) * Math.sin(p.angle);
-      if (d < 24 && along >= 0 && along < hitDist) { hit = q; hitDist = along; }
+      if (d < 25 && along >= 0 && along < hitDist) { hit = q; hitDist = along; }
     }
-    if (hit) damage(room, hit, hitDamage, p.team);
-    room.bullets.push({
-      id: room.nextBullet++, kind: "laser", owner: p.slot, team: p.team,
-      x: ax, y: ay, x2: bx, y2: by, life: 0.12, color: p.team === 1 ? "#47f6ff" : "#ff4c9a"
-    });
+    if (hit) {
+      if (c >= 0.98) {
+        damage(room, hit, 1000 * (boosted ? 1.7 : 1), p.team);
+        hit.burn = 0;
+      } else {
+        damage(room, hit, (5 + c * 5) * (boosted ? 1.7 : 1), p.team);
+        hit.burn = 3.0;
+        hit.burnDps = (4 + c * 3) * (boosted ? 1.7 : 1);
+        hit.burnTeam = p.team;
+      }
+    }
+    room.bullets.push({ id: room.nextBullet++, kind: "laser", owner: p.slot, team: p.team,
+      x: ax, y: ay, x2: bx, y2: by, life: 0.16, color, charge: c });
   } else {
+    const hitDamage = (18 + c * 25) * (boosted ? 1.7 : 1);
     const speed = 460 + c * 250;
-    room.bullets.push({
-      id: room.nextBullet++, kind: "bolt", owner: p.slot, team: p.team,
+    room.bullets.push({ id: room.nextBullet++, kind: "bolt", owner: p.slot, team: p.team,
       x: p.x + Math.cos(p.angle) * 25, y: p.y + Math.sin(p.angle) * 25,
       vx: Math.cos(p.angle) * speed + p.vx * 0.15,
       vy: Math.sin(p.angle) * speed + p.vy * 0.15,
-      life: 1.6, damage: hitDamage, color: p.team === 1 ? "#47f6ff" : "#ff4c9a"
-    });
+      life: 1.6, damage: hitDamage, color });
   }
 }
+
 wss.on("connection", ws => {
   let client = null;
   ws.on("message", raw => {
@@ -218,10 +227,10 @@ wss.on("connection", ws => {
       const room = makeRoom(mode);
       const slot = 1;
       const name = String(msg.name || "Pilot 1").trim().slice(0, 18) || "Pilot 1";
-      const c = { ws, slot, input: {}, room };
+      const c = { ws, slot, input: {}, room, ready: false };
       client = c;
       room.clients.set(ws, c);
-      room.players.push(makePlayer(slot, name, mode));
+      room.players.push(makePlayer(slot, name, mode, "bolt"));
       send(ws, { type: "welcome", slot, team: 1, code: room.code, mode, world: WORLD });
       syncLobby(room);
       status(room, `Room ${room.code} created. Share the code with your opponent.`);
@@ -236,19 +245,41 @@ wss.on("connection", ws => {
       if (room.clients.size >= room.maxPlayers) { send(ws, { type: "error", message: "That room is full." }); return; }
       const slot = Array.from({ length: room.maxPlayers }, (_, i) => i + 1).find(n => !room.players.some(p => p.slot === n));
       const name = String(msg.name || `Pilot ${slot}`).trim().slice(0, 18) || `Pilot ${slot}`;
-      const c = { ws, slot, input: {}, room };
+      const c = { ws, slot, input: {}, room, ready: false };
       client = c;
       room.clients.set(ws, c);
-      room.players.push(makePlayer(slot, name, room.mode));
+      room.players.push(makePlayer(slot, name, room.mode, "bolt"));
       send(ws, { type: "welcome", slot, team: room.mode === "1v1" ? (slot === 1 ? 1 : 2) : (slot <= 2 ? 1 : 2), code: room.code, mode: room.mode, world: WORLD });
       syncLobby(room);
-      if (room.clients.size === room.maxPlayers) resetRound(room);
-      else status(room, `${room.clients.size}/${room.maxPlayers} pilots connected. Waiting for more…`);
+      status(room, `${room.clients.size}/${room.maxPlayers} pilots connected. Choose a ship and press READY.`);
       snap(room);
       return;
     }
     if (!client) { send(ws, { type: "error", message: "Create or join a room first." }); return; }
     const room = client.room;
+    if (msg.type === "chooseShip") {
+      if (room.state !== "lobby") return;
+      const p = room.players.find(x => x.slot === client.slot);
+      if (!p) return;
+      p.ship = msg.ship === "laser" ? "laser" : "bolt";
+      p.maxHp = p.ship === "laser" ? 72 : 100;
+      p.hp = p.maxHp;
+      client.ready = false;
+      syncLobby(room);
+      snap(room);
+      return;
+    }
+    if (msg.type === "ready") {
+      if (room.state !== "lobby") return;
+      client.ready = msg.ready === true;
+      syncLobby(room);
+      const full = room.clients.size === room.maxPlayers;
+      const allReady = full && [...room.clients.values()].every(c => c.ready);
+      if (allReady) resetRound(room);
+      else status(room, full ? "All pilots must press READY to begin." : `${room.clients.size}/${room.maxPlayers} pilots connected. Waiting for more pilots.`);
+      snap(room);
+      return;
+    }
     if (msg.type === "input") {
       const i = msg.input || {};
       client.input = {
@@ -258,8 +289,7 @@ wss.on("connection", ws => {
       if (p) p.input = client.input;
     }
     if (msg.type === "shoot") {
-      const weapon = msg.weapon === "laser" ? "laser" : "bolt";
-      fire(room, client, weapon, msg.charge);
+      fire(room, client, msg.charge);
     }
     if (msg.type === "restart" && room.state === "ended" && client.slot === 1) {
       resetRound(room);
@@ -279,7 +309,7 @@ wss.on("connection", ws => {
     room.winner = null;
     room.bullets = [];
     room.pickups = [];
-    for (const p of room.players) { p.alive = true; p.hp = 100; p.shield = 0; }
+    for (const p of room.players) { p.alive = true; p.hp = p.maxHp; p.shield = 0; p.burn = 0; p.burnDps = 0; }
     status(room, "A pilot disconnected. Waiting for them to reconnect or for the room to be recreated.");
     syncLobby(room);
     snap(room);
@@ -292,6 +322,13 @@ function updateRoom(room, dt, now) {
   if (room.state !== "playing") return;
   for (const p of room.players) {
     if (!p.alive) continue;
+    if (p.burn > 0) {
+      const burnDt = Math.min(dt, p.burn);
+      damage(room, p, (p.burnDps || 0) * burnDt, p.burnTeam || 0);
+      p.burn -= burnDt;
+      if (p.burn <= 0) { p.burn = 0; p.burnDps = 0; }
+      if (!p.alive) continue;
+    }
     const i = p.input || {};
     let x = (i.right ? 1 : 0) - (i.left ? 1 : 0);
     let y = (i.down ? 1 : 0) - (i.up ? 1 : 0);

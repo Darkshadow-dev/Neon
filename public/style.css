@@ -27,3 +27,44 @@ input{width:100%;height:44px;padding:0 13px;color:white;background:#070b16;borde
 @media(min-width:900px){.mobile-controls{max-width:650px;margin-left:auto;margin-right:auto}}
 @media(max-width:650px){.app{width:calc(100% - 18px)}.topbar{height:66px}.brand{font-size:13px}.brand-mark{width:31px;height:31px;font-size:17px}.brand small{font-size:8px;letter-spacing:2px}.connection{font-size:8px}.lobby{margin-top:17px;padding:18px}.lobby-grid{grid-template-columns:1fr}.form-block,.join-block{padding:17px}.intro{font-size:15px;margin-bottom:20px}.feature-strip{gap:10px}.game-shell{padding-top:12px}.game-heading{padding:12px}.game-heading h2{font-size:16px}.room-actions{gap:5px}.small-button{font-size:8px;padding:0 7px}.badge{font-size:8px;padding:6px}.team-strip{grid-template-columns:1fr 88px 1fr;gap:5px}.team-card{padding:8px 7px}.team-card b{font-size:8px;letter-spacing:0}.team-card span{font-size:11px}.round-state{font-size:8px}.round-state small{font-size:8px}.arena-corner{font-size:6px;top:7px}.arena-corner.top-left{left:7px}.arena-corner.top-right{right:7px}.combat-hud{grid-template-columns:1fr 1fr;gap:6px}.pilot-hud,.weapon-hud,.boost-hud{padding:9px}.boost-hud{grid-column:1/-1;display:flex;align-items:center;gap:12px;flex-wrap:wrap}.boost-hud .hud-caption{margin:0}.boost-hud>b{margin:0}.boost-hud>small{margin-left:auto}.hud-label{font-size:8px}.ammo{font-size:10px;letter-spacing:2px}.ammo small{font-size:8px}.mobile-controls{padding:12px 10px;gap:8px;margin-top:8px}.dpad{width:145px;height:130px;gap:4px}.dir{font-size:17px}.fire-area{gap:7px}.fire-button{width:128px;height:100px}.fire-button b{font-size:8px}.fire-button small{font-size:7px}.charge-readout{min-width:48px}.charge-readout span,.charge-readout b{font-size:8px}.controls-hint{font-size:7px;line-height:1.6}.site-footer{font-size:7px;justify-content:center}.site-footer span:last-child{display:none}}
 @media(max-width:380px){.dpad{width:126px;height:118px}.fire-button{width:112px;height:94px}.charge-readout{display:none}.team-card span{max-width:100px}.room-actions .badge{display:none}}
+
+/* Ship-selection carousel, mobile tilt/fullscreen and touch-safe controls */
+button,.ship-card,.dir,.fire-button{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation}
+.game-shell,.mobile-controls,.arena-wrap{touch-action:pan-y}
+.ship-cards{touch-action:pan-x pan-y}
+.ship-picker{margin:10px 0;padding:14px;background:#090f1f;border:1px solid #26334f;overflow:hidden}
+.ship-picker-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+.ship-picker-heading h3{font:800 17px Orbitron;margin:5px 0 0}.ship-picker-heading h3 span{color:var(--cyan)}
+.ship-picker-heading>small{font:700 8px Orbitron;letter-spacing:1px;color:#7586a5}
+.ship-cards{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;padding:2px 1px 9px;scrollbar-color:#263b59 #080d19;}
+.ship-card{flex:1 0 calc(50% - 5px);min-width:230px;min-height:165px;text-align:left;padding:12px;background:linear-gradient(135deg,#101a2c,#090d19);border:1px solid #2a3855;color:var(--text);display:flex;flex-direction:column;gap:5px;scroll-snap-align:center;position:relative}
+.ship-card.selected{border-color:var(--cyan);box-shadow:inset 0 0 24px #54f4ff0d,0 0 14px #54f4ff12;background:linear-gradient(135deg,#102635,#0a1020)}
+.ship-card[data-ship=laser].selected{border-color:var(--pink);box-shadow:inset 0 0 24px #ff4d9d0c,0 0 14px #ff4d9d12}
+.ship-number{font:700 8px Orbitron;letter-spacing:1px;color:#7e91b1}.ship-card strong{font:800 13px Orbitron;letter-spacing:.4px}.ship-preview{position:absolute;right:15px;top:24px;font-size:34px;line-height:1;color:var(--cyan);text-shadow:0 0 18px currentColor}.laser-preview{color:var(--pink)}
+.ship-description{font-size:12px;line-height:1.25;color:#a6b5ce;max-width:80%}.ship-stats{display:flex;gap:16px;margin-top:auto;padding-top:8px;border-top:1px solid #25314a}.ship-stats>span{font:700 8px Orbitron;color:#7487a5}.ship-stats b{display:block;color:#e5f5ff;font-size:10px;margin-top:3px}
+.ship-ready-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:8px}.ship-ready-row>span{font-size:12px;color:#91a4c1}.ready-button{width:auto;min-width:140px;height:38px;margin:0}
+.weapon-name{display:block;font:800 12px Orbitron;color:var(--cyan);margin:2px 0 5px}.weapon-description{display:block;min-height:28px;color:#8b9db9;font-size:11px;line-height:1.25}
+@media(max-width:650px){
+  .room-actions{flex-wrap:wrap;justify-content:flex-end}.room-actions .small-button{height:29px;font-size:7px;letter-spacing:0;padding:0 6px}
+  .ship-picker{padding:10px;margin:7px 0}.ship-picker-heading h3{font-size:14px}.ship-picker-heading>small{font-size:7px}
+  .ship-card{flex:0 0 82%;min-width:0;min-height:155px;padding:10px}.ship-description{font-size:11px}.ship-stats{gap:12px}
+  .ship-ready-row>span{font-size:10px}.ready-button{min-width:116px;font-size:9px;height:36px}
+  .weapon-description{font-size:10px;min-height:24px}
+}
+@media (orientation:landscape) and (max-height:520px){
+  .app{width:calc(100% - 12px)}.topbar,.site-footer{display:none!important}.game-shell{padding:4px 0}.game-heading{padding:5px 8px}.game-heading .eyebrow{display:none}.game-heading h2{font-size:12px;margin:0}.team-strip{margin:4px 0;grid-template-columns:1fr 100px 1fr}.team-card{padding:4px 7px}.team-card span{font-size:10px}.ship-picker{padding:6px;margin:4px 0}.ship-picker-heading{margin-bottom:4px}.ship-picker-heading h3{font-size:12px}.ship-card{min-height:100px;padding:7px}.ship-description{font-size:10px}.ship-preview{font-size:24px}.ship-stats{padding-top:4px}.ship-ready-row{padding-top:4px}.ready-button{height:30px}.arena-wrap canvas{height:36vh;min-height:130px;aspect-ratio:auto}.combat-hud{margin-top:4px;gap:4px}.pilot-hud,.weapon-hud,.boost-hud{padding:5px 8px}.mobile-controls{margin:4px 0;padding:5px 8px;gap:8px}.dpad{width:120px;height:90px}.fire-button{height:76px;width:130px}.fire-area{gap:7px}.charge-readout{min-width:50px}.controls-hint{margin:3px 0;font-size:7px}
+}
+html:fullscreen,html:fullscreen body{width:100%;height:100%;overflow:hidden;background:#050711}
+html:fullscreen .app{width:100%;max-width:none;margin:0;padding:0 8px;height:100dvh;overflow:auto}
+html:fullscreen .topbar,html:fullscreen .site-footer{display:none}
+html:fullscreen .game-shell{padding:4px 0}
+html:fullscreen .game-heading{padding:5px 8px}
+html:fullscreen .team-strip{margin:4px 0}
+html:fullscreen .arena-wrap canvas{height:min(42dvh,420px);aspect-ratio:auto}
+html:fullscreen .mobile-controls{margin:5px 0;padding:6px 10px}
+html:fullscreen .dpad{height:min(17dvh,125px)}
+html:fullscreen .fire-button{height:min(16dvh,110px)}
+html:fullscreen .controls-hint{margin:3px 0}
+html:fullscreen .ship-picker{padding:6px;margin:4px 0}
+html:fullscreen .ship-picker-heading{margin-bottom:4px}
+html:fullscreen .ship-card{min-height:100px}
