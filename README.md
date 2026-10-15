@@ -57,3 +57,13 @@ Open `http://localhost:8080` on the host computer. To play on the same Wi-Fi/hot
 ## Notes / current test scope
 
 This is a substantial playable v3 foundation, not a professionally balanced release. The first test pass should focus on two-browser connection, room list visibility, room settings, reconnect/leave behavior, wall collisions, bots, scoring and mobile input. Room state is held in memory and resets if the server restarts; public rooms disappear when their server process is restarted. A production public server would need persistent identities, rate limits, moderation/reporting, and stronger matchmaking/anti-cheat protections.
+
+
+## v3.0.1 usability and physics fixes
+
+- Match options are selected during room creation; there is no in-room settings panel.
+- Neon Ball always uses Open Grid, enforced by both the lobby and server.
+- Own hull is shown as a 0–100 percentage. Other pilots are shown with health bars only.
+- Dash Wraith dashes with Shift on PC or the DASH touch button. It dashes in the current movement direction, or toward its facing direction if standing still.
+- Buttons and combat controls disable text selection during mouse/touch play.
+- Ball collisions with projectiles, laser beams and moving ships impart directional momentum; impacts can knock the ball loose from a carrier.
