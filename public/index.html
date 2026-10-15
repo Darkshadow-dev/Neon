@@ -1,6 +1,89 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="theme-color" content="#070b14"><title>NEON DUEL Online</title><link rel="stylesheet" href="style.css"></head><body><main id="app">
-<header><div class="brand">● NEON <b>DUEL</b> <small>ONLINE</small></div><div id="connection">● OFFLINE</div></header>
-<section class="connect"><label for="address">SERVER ADDRESS</label><div class="address"><input id="address" placeholder="wss://your-server.example" spellcheck="false"><button id="connect">CONNECT</button></div><p>Use <code>ws://IP:8080</code> for trusted-network testing. Internet browser play should use <code>wss://</code>.</p><div class="row"><b id="slot">PLAYER —</b><span id="status">Not connected</span></div></section>
-<section class="hud"><div><b class="blue">● PLAYER 1</b><div class="bar"><i id="hp1"></i></div></div><div id="state">WAITING</div><div><b class="red">PLAYER 2 ●</b><div class="bar"><i id="hp2"></i></div></div></section>
-<section class="arena"><canvas id="game"></canvas><div id="overlay"><strong>NEON <span>DUEL</span></strong><p id="message">Connect to a server. When the second player joins, the duel begins.</p></div></section>
-<section class="controls"><div class="row"><b>FLIGHT CONTROL</b><b class="blue">YOUR SHIP</b></div><div class="controlrow"><div class="pad"><button data-move="up">▲</button><div><button data-move="left">◀</button><span>✦</span><button data-move="right">▶</button></div><button data-move="down">▼</button></div><button id="fire" class="fire">✦<b>FIRE</b><small>HOLD</small></button></div><footer><span class="blue">● PLAYER 1</span> VS <span class="red">● PLAYER 2</span><small>SERVER-AUTHORITATIVE</small></footer></section></main><script src="client.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <meta name="theme-color" content="#050711">
+  <title>NEON DUEL // ONLINE</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="ambient ambient-a"></div><div class="ambient ambient-b"></div>
+<main class="app">
+  <header class="topbar">
+    <a class="brand" href="#"><span class="brand-mark">N</span><span>NEON <b>DUEL</b><small>ONLINE COMBAT SYSTEM</small></span></a>
+    <div class="connection"><i id="connDot"></i><span id="connection">CONNECTING</span></div>
+  </header>
+
+  <section id="lobby" class="lobby panel">
+    <div class="eyebrow">✦ MULTIPLAYER ARENA // SEASON 02</div>
+    <h1>ENTER THE <span>DUEL</span></h1>
+    <p class="intro">Create a private room, share its code, and fight across the neon frontier.</p>
+    <div class="lobby-grid">
+      <div class="form-block">
+        <label for="pilotName">PILOT CALLSIGN <span>18 CHAR MAX</span></label>
+        <input id="pilotName" maxlength="18" autocomplete="nickname" placeholder="Enter callsign" value="Pilot">
+        <label>GAME MODE</label>
+        <div class="mode-picker">
+          <button class="mode selected" data-mode="1v1"><strong>1 VS 1</strong><small>DUEL MODE</small></button>
+          <button class="mode" data-mode="2v2"><strong>2 VS 2</strong><small>TEAM BATTLE</small></button>
+        </div>
+        <button id="createRoom" class="primary">CREATE ROOM <span>↗</span></button>
+      </div>
+      <div class="join-block">
+        <div class="join-icon">⌘</div>
+        <h2>JOIN A ROOM</h2>
+        <p>Have a room code from a friend?</p>
+        <label for="roomCode">SIX-CHARACTER ROOM CODE</label>
+        <input id="roomCode" maxlength="6" autocomplete="off" autocapitalize="characters" placeholder="ABC234">
+        <button id="joinRoom" class="secondary">JOIN BATTLE</button>
+        <div class="mini-note">No account required · Share the code privately</div>
+      </div>
+    </div>
+    <div id="lobbyError" class="error" role="status"></div>
+    <div class="feature-strip"><span>◈ ROOM CODES</span><span>◈ CHARGED WEAPONS</span><span>◈ LIVE PICKUPS</span><span>◈ 1V1 / 2V2</span></div>
+  </section>
+
+  <section id="gameShell" class="game-shell hidden">
+    <div class="game-heading panel">
+      <div><div class="eyebrow">ACTIVE COMBAT ZONE</div><h2 id="roomTitle">ROOM <span>------</span></h2></div>
+      <div class="room-actions"><span id="modeBadge" class="badge">1V1</span><button id="copyCode" class="small-button">COPY CODE</button><button id="leaveRoom" class="small-button danger">LEAVE</button></div>
+    </div>
+    <div class="team-strip">
+      <div class="team-card blue-team"><b>◆ YOUR SQUAD</b><span id="blueRoster">Waiting for pilots</span></div>
+      <div class="round-state"><i></i><span id="state">LOBBY</span><small id="playersCount">1 / 2 PILOTS</small></div>
+      <div class="team-card pink-team"><b>◆ RIVAL SQUAD</b><span id="redRoster">Waiting for rivals</span></div>
+    </div>
+    <div class="arena-wrap panel">
+      <canvas id="game"></canvas>
+      <div id="overlay" class="overlay">
+        <div class="overlay-symbol">✦</div>
+        <h2 id="overlayTitle">ROOM READY</h2>
+        <p id="message">Share your room code to bring in the other pilot.</p>
+        <button id="restart" class="primary hidden">PLAY AGAIN</button>
+      </div>
+      <div class="arena-corner top-left">SECTOR 09 <span>•</span> NO GRAVITY</div>
+      <div class="arena-corner top-right">LIVE SERVER <i></i></div>
+    </div>
+    <div class="combat-hud">
+      <div class="pilot-hud"><div class="hud-label"><span id="myLabel">YOUR SHIP</span><b id="hpText">100 HP</b></div><div class="meter"><i id="hpBar"></i></div><div class="shield-meter"><span>SHIELD</span><i id="shieldBar"></i></div></div>
+      <div class="weapon-hud"><span class="hud-caption">WEAPON SYSTEM</span><div class="weapon-switch"><button class="weapon selected" data-weapon="bolt">⚡ BOLT</button><button class="weapon" data-weapon="laser">╱ LASER</button></div><div class="ammo" id="ammo">● ● ● ● ● ● <small>6/6</small></div><small class="ammo-note">ONE ROUND RECHARGES / SEC</small></div>
+      <div class="boost-hud"><span class="hud-caption">PICKUP EFFECT</span><b id="boostText">NO BOOST</b><small>▰ SHIELD BLOCKS DAMAGE<br>✦ BOOST AMPLIFIES SHOTS</small></div>
+    </div>
+    <section class="mobile-controls">
+      <div class="dpad">
+        <button class="dir up" data-move="up" aria-label="Move up">▲</button>
+        <button class="dir left" data-move="left" aria-label="Move left">◀</button>
+        <div class="dpad-core">✦</div>
+        <button class="dir right" data-move="right" aria-label="Move right">▶</button>
+        <button class="dir down" data-move="down" aria-label="Move down">▼</button>
+      </div>
+      <div class="fire-area"><div class="charge-readout"><span>CHARGE</span><b id="chargeText">READY</b></div><button id="fire" class="fire-button"><span class="fire-core">✦</span><b>HOLD TO CHARGE</b><small>RELEASE TO FIRE</small><i id="chargeBar"></i></button></div>
+    </section>
+    <div class="controls-hint">MOVE: ARROWS / WASD · FIRE: HOLD + RELEASE · SPACE: CHARGE SHOT · TOUCH CONTROLS SUPPORTED</div>
+  </section>
+  <footer class="site-footer"><span>NEON DUEL // ONLINE</span><span>SERVER-AUTHORITATIVE COMBAT</span><span>PLAY FAIR. FLY FAST.</span></footer>
+</main>
+<script src="client.js"></script>
+</body>
+</html>
