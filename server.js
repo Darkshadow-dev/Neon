@@ -1,395 +1,43 @@
-const http = require("http");
-const fs = require("fs");
-const path = require("path");
-const crypto = require("crypto");
-const WebSocket = require("ws");
-
-const HOST = "0.0.0.0";
-const PORT = Number(process.env.PORT || 8080);
-const PUBLIC_DIR = path.join(__dirname, "public");
-const MAX_ROOMS = 500;
-const TICK_MS = 50;
-const WORLD = { width: 1000, height: 620 };
-const rooms = new Map();
-const mime = {
-  ".html": "text/html; charset=utf-8",
-  ".css": "text/css; charset=utf-8",
-  ".js": "text/javascript; charset=utf-8",
-  ".svg": "image/svg+xml"
-};
-
-const server = http.createServer((req, res) => {
-  if (!["GET", "HEAD"].includes(req.method)) {
-    res.writeHead(405); return res.end("Method not allowed");
-  }
-  let pathname;
-  try { pathname = decodeURIComponent(new URL(req.url, "http://localhost").pathname); }
-  catch { res.writeHead(400); return res.end("Bad request"); }
-  if (pathname === "/") pathname = "/index.html";
-  const filename = path.resolve(PUBLIC_DIR, "." + pathname);
-  if (!filename.startsWith(PUBLIC_DIR + path.sep)) {
-    res.writeHead(403); return res.end("Forbidden");
-  }
-  fs.readFile(filename, (err, data) => {
-    if (err) { res.writeHead(404); return res.end("Not found"); }
-    res.writeHead(200, {
-      "Content-Type": mime[path.extname(filename)] || "application/octet-stream",
-      "Cache-Control": "no-store",
-      "X-Content-Type-Options": "nosniff",
-      "Referrer-Policy": "no-referrer",
-      "Content-Security-Policy": "default-src 'self'; connect-src 'self' ws: wss:; style-src 'self' 'unsafe-inline'; script-src 'self'; base-uri 'none'; frame-ancestors 'none'"
-    });
-    res.end(req.method === "HEAD" ? undefined : data);
-  });
-});
-
-const wss = new WebSocket.Server({ noServer: true, maxPayload: 4096 });
-server.on("upgrade", (req, socket, head) => {
-  wss.handleUpgrade(req, socket, head, ws => wss.emit("connection", ws, req));
-});
-
-function send(ws, obj) {
-  if (ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify(obj));
-}
-function code() {
-  const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  let result = "";
-  for (let i = 0; i < 6; i++) result += alphabet[crypto.randomInt(alphabet.length)];
-  return result;
-}
-function makeRoom(mode) {
-  let roomCode;
-  do { roomCode = code(); } while (rooms.has(roomCode));
-  const room = {
-    code: roomCode, mode, maxPlayers: mode === "2v2" ? 4 : 2,
-    clients: new Map(), players: [], bullets: [], pickups: [],
-    state: "lobby", winner: null, nextBullet: 1, nextPickup: 1,
-    lastPickup: Date.now(), created: Date.now()
-  };
-  rooms.set(roomCode, room);
-  return room;
-}
-function makePlayer(slot, name, mode, ship = "bolt") {
-  const team = mode === "1v1" ? (slot === 1 ? 1 : 2) : (slot <= 2 ? 1 : 2);
-  const startX = team === 1 ? 160 : WORLD.width - 160;
-  const startY = slot % 2 === 1 ? WORLD.height * 0.36 : WORLD.height * 0.64;
-  const shipType = ship === "laser" ? "laser" : "bolt";
-  const maxHp = shipType === "laser" ? 72 : 100;
-  return {
-    slot, id: slot, name, team, ship: shipType, x: startX, y: startY,
-    vx: 0, vy: 0, angle: team === 1 ? 0 : Math.PI,
-    hp: maxHp, maxHp, shield: 0, damageBoost: 0,
-    ammo: 6, ammoClock: 0, alive: true, input: {},
-    lastShot: 0, burn: 0, burnDps: 0, burnTeam: 0
-  };
-}
-function status(room, message) {
-  broadcast(room, { type: "status", state: room.state, message, winner: room.winner });
-}
-function broadcast(room, obj) {
-  const data = JSON.stringify(obj);
-  for (const ws of room.clients.keys()) {
-    if (ws.readyState === WebSocket.OPEN) ws.send(data);
-  }
-}
-function lobbyInfo(room) {
-  return {
-    type: "room",
-    code: room.code,
-    mode: room.mode,
-    state: room.state,
-    maxPlayers: room.maxPlayers,
-    players: room.players.map(p => ({ slot: p.slot, name: p.name, team: p.team, ship: p.ship, ready: !![...room.clients.values()].find(c => c.slot === p.slot)?.ready, hp: p.maxHp, damage: p.ship === "laser" ? "8 + burn" : "18–43" }))
-  };
-}
-function syncLobby(room) {
-  broadcast(room, lobbyInfo(room));
-}
-function resetRound(room) {
-  room.players.forEach(p => {
-    const fresh = makePlayer(p.slot, p.name, room.mode, p.ship);
-    Object.assign(p, fresh);
-  });
-  room.bullets = [];
-  room.pickups = [];
-  room.winner = null;
-  room.state = room.clients.size === room.maxPlayers && [...room.clients.values()].every(c => c.ready) ? "playing" : "lobby";
-  room.lastPickup = Date.now();
-  for (const c of room.clients.values()) c.input = {};
-  status(room, room.state === "playing" ? "All pilots ready — fight!" : "Waiting for pilots…");
-  snap(room);
-}
-function snap(room) {
-  broadcast(room, {
-    type: "state", code: room.code, mode: room.mode, state: room.state,
-    winner: room.winner, world: WORLD,
-    players: room.players.map(p => ({
-      id: p.id, slot: p.slot, name: p.name, team: p.team, ship: p.ship,
-      x: p.x, y: p.y, vx: p.vx, vy: p.vy, angle: p.angle,
-      hp: p.hp, maxHp: p.maxHp, shield: p.shield,
-      damageBoost: p.damageBoost, ammo: p.ammo, alive: p.alive
-    })),
-    bullets: room.bullets.map(b => ({ ...b })),
-    pickups: room.pickups.map(p => ({ ...p }))
-  });
-}
-function teamAlive(room, team) {
-  return room.players.some(p => p.team === team && p.alive);
-}
-function nearestEnemy(room, p) {
-  let best = null, distance = Infinity;
-  for (const q of room.players) {
-    if (q.team === p.team || !q.alive) continue;
-    const d = Math.hypot(q.x - p.x, q.y - p.y);
-    if (d < distance) { distance = d; best = q; }
-  }
-  return best;
-}
-function damage(room, target, amount, sourceTeam) {
-  if (target.shield > 0) {
-    const absorbed = Math.min(target.shield, amount);
-    target.shield -= absorbed;
-    amount -= absorbed;
-  }
-  if (amount > 0) target.hp = Math.max(0, target.hp - amount);
-  if (target.hp <= 0 && target.alive) {
-    target.alive = false;
-    target.vx = target.vy = 0;
-    if (!teamAlive(room, target.team)) {
-      room.state = "ended";
-      room.winner = sourceTeam;
-      status(room, room.mode === "1v1" ? `PLAYER ${sourceTeam} WINS!` : `TEAM ${sourceTeam} WINS!`);
-    }
-  }
-}
-function segmentDistance(px, py, ax, ay, bx, by) {
-  const dx = bx - ax, dy = by - ay;
-  const l2 = dx * dx + dy * dy;
-  if (!l2) return Math.hypot(px - ax, py - ay);
-  const t = Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / l2));
-  return Math.hypot(px - (ax + t * dx), py - (ay + t * dy));
-}
-function fire(room, client, charge) {
-  const p = room.players.find(x => x.slot === client.slot);
-  if (!p || !p.alive || room.state !== "playing") return;
-  const now = Date.now();
-  if (p.ammo <= 0 || now - p.lastShot < 220) return;
-  p.lastShot = now;
-  p.ammo--;
-  const c = Math.max(0, Math.min(1, Number(charge) || 0));
-  const boosted = p.damageBoost > 0;
-  const color = p.team === 1 ? "#47f6ff" : "#ff4c9a";
-  if (p.ship === "laser") {
-    const length = 900;
-    const ax = p.x + Math.cos(p.angle) * 24, ay = p.y + Math.sin(p.angle) * 24;
-    const bx = ax + Math.cos(p.angle) * length, by = ay + Math.sin(p.angle) * length;
-    let hit = null, hitDist = Infinity;
-    for (const q of room.players) {
-      if (q.team === p.team || !q.alive) continue;
-      const d = segmentDistance(q.x, q.y, ax, ay, bx, by);
-      const along = (q.x - ax) * Math.cos(p.angle) + (q.y - ay) * Math.sin(p.angle);
-      if (d < 25 && along >= 0 && along < hitDist) { hit = q; hitDist = along; }
-    }
-    if (hit) {
-      if (c >= 0.98) {
-        damage(room, hit, 1000 * (boosted ? 1.7 : 1), p.team);
-        hit.burn = 0;
-      } else {
-        damage(room, hit, (5 + c * 5) * (boosted ? 1.7 : 1), p.team);
-        hit.burn = 3.0;
-        hit.burnDps = (4 + c * 3) * (boosted ? 1.7 : 1);
-        hit.burnTeam = p.team;
-      }
-    }
-    room.bullets.push({ id: room.nextBullet++, kind: "laser", owner: p.slot, team: p.team,
-      x: ax, y: ay, x2: bx, y2: by, life: 0.16, color, charge: c });
-  } else {
-    const hitDamage = (18 + c * 25) * (boosted ? 1.7 : 1);
-    const speed = 460 + c * 250;
-    room.bullets.push({ id: room.nextBullet++, kind: "bolt", owner: p.slot, team: p.team,
-      x: p.x + Math.cos(p.angle) * 25, y: p.y + Math.sin(p.angle) * 25,
-      vx: Math.cos(p.angle) * speed + p.vx * 0.15,
-      vy: Math.sin(p.angle) * speed + p.vy * 0.15,
-      life: 1.6, damage: hitDamage, color });
-  }
-}
-
-wss.on("connection", ws => {
-  let client = null;
-  ws.on("message", raw => {
-    let msg;
-    try { msg = JSON.parse(raw); } catch { return; }
-    if (!msg || typeof msg !== "object") return;
-    if (msg.type === "create") {
-      if (client) return;
-      if (rooms.size >= MAX_ROOMS) { send(ws, { type: "error", message: "Room limit reached. Try again shortly." }); return; }
-      const mode = msg.mode === "2v2" ? "2v2" : "1v1";
-      const room = makeRoom(mode);
-      const slot = 1;
-      const name = String(msg.name || "Pilot 1").trim().slice(0, 18) || "Pilot 1";
-      const c = { ws, slot, input: {}, room, ready: false };
-      client = c;
-      room.clients.set(ws, c);
-      room.players.push(makePlayer(slot, name, mode, "bolt"));
-      send(ws, { type: "welcome", slot, team: 1, code: room.code, mode, world: WORLD });
-      syncLobby(room);
-      status(room, `Room ${room.code} created. Share the code with your opponent.`);
-      snap(room);
-      return;
-    }
-    if (msg.type === "join") {
-      if (client) return;
-      const room = rooms.get(String(msg.code || "").toUpperCase().replace(/[^A-Z0-9]/g, ""));
-      if (!room) { send(ws, { type: "error", message: "Room not found. Check the code." }); return; }
-      if (room.state === "ended") { send(ws, { type: "error", message: "That round has ended. Ask the host to create a new room." }); return; }
-      if (room.clients.size >= room.maxPlayers) { send(ws, { type: "error", message: "That room is full." }); return; }
-      const slot = Array.from({ length: room.maxPlayers }, (_, i) => i + 1).find(n => !room.players.some(p => p.slot === n));
-      const name = String(msg.name || `Pilot ${slot}`).trim().slice(0, 18) || `Pilot ${slot}`;
-      const c = { ws, slot, input: {}, room, ready: false };
-      client = c;
-      room.clients.set(ws, c);
-      room.players.push(makePlayer(slot, name, room.mode, "bolt"));
-      send(ws, { type: "welcome", slot, team: room.mode === "1v1" ? (slot === 1 ? 1 : 2) : (slot <= 2 ? 1 : 2), code: room.code, mode: room.mode, world: WORLD });
-      syncLobby(room);
-      status(room, `${room.clients.size}/${room.maxPlayers} pilots connected. Choose a ship and press READY.`);
-      snap(room);
-      return;
-    }
-    if (!client) { send(ws, { type: "error", message: "Create or join a room first." }); return; }
-    const room = client.room;
-    if (msg.type === "chooseShip") {
-      if (room.state !== "lobby") return;
-      const p = room.players.find(x => x.slot === client.slot);
-      if (!p) return;
-      p.ship = msg.ship === "laser" ? "laser" : "bolt";
-      p.maxHp = p.ship === "laser" ? 72 : 100;
-      p.hp = p.maxHp;
-      client.ready = false;
-      syncLobby(room);
-      snap(room);
-      return;
-    }
-    if (msg.type === "ready") {
-      if (room.state !== "lobby") return;
-      client.ready = msg.ready === true;
-      syncLobby(room);
-      const full = room.clients.size === room.maxPlayers;
-      const allReady = full && [...room.clients.values()].every(c => c.ready);
-      if (allReady) resetRound(room);
-      else status(room, full ? "All pilots must press READY to begin." : `${room.clients.size}/${room.maxPlayers} pilots connected. Waiting for more pilots.`);
-      snap(room);
-      return;
-    }
-    if (msg.type === "input") {
-      const i = msg.input || {};
-      client.input = {
-        up: i.up === true, down: i.down === true, left: i.left === true, right: i.right === true
-      };
-      const p = room.players.find(x => x.slot === client.slot);
-      if (p) p.input = client.input;
-    }
-    if (msg.type === "shoot") {
-      fire(room, client, msg.charge);
-    }
-    if (msg.type === "restart" && room.state === "ended" && client.slot === 1) {
-      resetRound(room);
-      syncLobby(room);
-    }
-  });
-  ws.on("close", () => {
-    if (!client) return;
-    const room = client.room;
-    room.clients.delete(ws);
-    room.players = room.players.filter(p => p.slot !== client.slot);
-    if (room.clients.size === 0) {
-      rooms.delete(room.code);
-      return;
-    }
-    room.state = "lobby";
-    room.winner = null;
-    room.bullets = [];
-    room.pickups = [];
-    for (const p of room.players) { p.alive = true; p.hp = p.maxHp; p.shield = 0; p.burn = 0; p.burnDps = 0; }
-    status(room, "A pilot disconnected. Waiting for them to reconnect or for the room to be recreated.");
-    syncLobby(room);
-    snap(room);
-  });
-  ws.on("error", () => {});
-});
-
-function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
-function updateRoom(room, dt, now) {
-  if (room.state !== "playing") return;
-  for (const p of room.players) {
-    if (!p.alive) continue;
-    if (p.burn > 0) {
-      const burnDt = Math.min(dt, p.burn);
-      damage(room, p, (p.burnDps || 0) * burnDt, p.burnTeam || 0);
-      p.burn -= burnDt;
-      if (p.burn <= 0) { p.burn = 0; p.burnDps = 0; }
-      if (!p.alive) continue;
-    }
-    const i = p.input || {};
-    let x = (i.right ? 1 : 0) - (i.left ? 1 : 0);
-    let y = (i.down ? 1 : 0) - (i.up ? 1 : 0);
-    const n = Math.hypot(x, y);
-    if (n) { x /= n; y /= n; }
-    p.vx += x * 660 * dt;
-    p.vy += y * 660 * dt;
-    const speed = Math.hypot(p.vx, p.vy);
-    if (speed > 245) { p.vx = p.vx / speed * 245; p.vy = p.vy / speed * 245; }
-    const drag = Math.pow(0.003, dt);
-    p.vx *= drag; p.vy *= drag;
-    p.x = clamp(p.x + p.vx * dt, 26, WORLD.width - 26);
-    p.y = clamp(p.y + p.vy * dt, 26, WORLD.height - 26);
-    const enemy = nearestEnemy(room, p);
-    if (enemy) p.angle = Math.atan2(enemy.y - p.y, enemy.x - p.x);
-    p.damageBoost = Math.max(0, p.damageBoost - dt);
-    p.ammoClock += dt;
-    while (p.ammo < 6 && p.ammoClock >= 1) { p.ammo++; p.ammoClock -= 1; }
-    if (p.ammo >= 6) p.ammoClock = 0;
-  }
-  for (let j = room.bullets.length - 1; j >= 0; j--) {
-    const b = room.bullets[j];
-    b.life -= dt;
-    if (b.kind === "laser") { if (b.life <= 0) room.bullets.splice(j, 1); continue; }
-    b.x += b.vx * dt; b.y += b.vy * dt;
-    const target = room.players.find(p => p.team !== b.team && p.alive && Math.hypot(p.x - b.x, p.y - b.y) < 20);
-    if (target) {
-      damage(room, target, b.damage, b.team);
-      room.bullets.splice(j, 1);
-      continue;
-    }
-    if (b.life <= 0 || b.x < -40 || b.x > WORLD.width + 40 || b.y < -40 || b.y > WORLD.height + 40) room.bullets.splice(j, 1);
-  }
-  if (now - room.lastPickup > 7500 && room.pickups.length < 3) {
-    room.lastPickup = now;
-    const type = Math.random() < 0.5 ? "shield" : "boost";
-    room.pickups.push({
-      id: room.nextPickup++, type,
-      x: 70 + Math.random() * (WORLD.width - 140), y: -25,
-      vx: (Math.random() - 0.5) * 35, vy: 45 + Math.random() * 25,
-      angle: Math.random() * Math.PI, life: 12
-    });
-  }
-  for (let j = room.pickups.length - 1; j >= 0; j--) {
-    const item = room.pickups[j];
-    item.y += item.vy * dt; item.x += item.vx * dt; item.angle += dt;
-    item.life -= dt;
-    const p = room.players.find(p => p.alive && Math.hypot(p.x - item.x, p.y - item.y) < 30);
-    if (p) {
-      if (item.type === "shield") p.shield = Math.min(60, p.shield + 35);
-      else p.damageBoost = Math.max(p.damageBoost, 7);
-      room.pickups.splice(j, 1);
-    } else if (item.life <= 0 || item.y > WORLD.height + 30) room.pickups.splice(j, 1);
-  }
-}
-setInterval(() => {
-  const now = Date.now();
-  for (const room of rooms.values()) {
-    updateRoom(room, TICK_MS / 1000, now);
-    snap(room);
-  }
-}, TICK_MS);
-
-server.listen(PORT, HOST, () => console.log(`NEON DUEL v2 listening on ${HOST}:${PORT}`));
+const http = require('http');
+const fs = require('fs');
+const path = require('path');
+const crypto = require('crypto');
+const WebSocket = require('ws');
+const HOST='0.0.0.0', PORT=Number(process.env.PORT||8080), PUBLIC=path.join(__dirname,'public');
+const WORLD={width:1200,height:760}, TICK=50, MAX_ROOMS=300, rooms=new Map();
+const mime={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8'};
+const httpServer=http.createServer((req,res)=>{if(!['GET','HEAD'].includes(req.method)){res.writeHead(405);return res.end('Method not allowed')}let p;try{p=decodeURIComponent(new URL(req.url,'http://localhost').pathname)}catch{return res.writeHead(400).end('Bad request')}if(p==='/')p='/index.html';const f=path.resolve(PUBLIC,'.'+p);if(!f.startsWith(PUBLIC+path.sep))return res.writeHead(403).end('Forbidden');fs.readFile(f,(e,d)=>{if(e)return res.writeHead(404).end('Not found');res.writeHead(200,{'Content-Type':mime[path.extname(f)]||'application/octet-stream','Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'self'; connect-src 'self' ws: wss:; style-src 'self' 'unsafe-inline'; script-src 'self'; base-uri 'none'; frame-ancestors 'none'"});res.end(req.method==='HEAD'?undefined:d)})});
+const wss=new WebSocket.Server({noServer:true,maxPayload:8192});httpServer.on('upgrade',(req,s,h)=>wss.handleUpgrade(req,s,h,ws=>wss.emit('connection',ws,req)));
+const send=(ws,o)=>{if(ws.readyState===WebSocket.OPEN)ws.send(JSON.stringify(o))};
+function makeCode(){const a='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';return Array.from({length:6},()=>a[crypto.randomInt(a.length)]).join('')}
+const MODES={duel:{label:'DUEL',sizes:[2,4]},ball:{label:'BALL',sizes:[2,4,8]},ctf:{label:'CAPTURE THE FLAG',sizes:[4,6,8,12,16]}};
+function mapWalls(map){const w=WORLD.width,h=WORLD.height;if(map==='cover')return [{x:390,y:160,w:54,h:170,hp:700,maxHp:700},{x:390,y:430,w:54,h:170,hp:700,maxHp:700},{x:756,y:160,w:54,h:170,hp:700,maxHp:700},{x:756,y:430,w:54,h:170,hp:700,maxHp:700},{x:565,y:330,w:70,h:100,hp:1300,maxHp:1300}];if(map==='maze')return [{x:280,y:120,w:40,h:230,hp:1800,maxHp:1800},{x:280,y:420,w:40,h:220,hp:1800,maxHp:1800},{x:450,y:250,w:240,h:38,hp:1800,maxHp:1800},{x:450,y:480,w:240,h:38,hp:1800,maxHp:1800},{x:690,y:120,w:40,h:190,hp:1800,maxHp:1800},{x:690,y:440,w:40,h:200,hp:1800,maxHp:1800},{x:850,y:280,w:40,h:200,hp:1800,maxHp:1800}];return []}
+function createRoom(cfg,hostName){let c;do{c=makeCode()}while(rooms.has(c));const room={code:c,hostSlot:1,visibility:cfg.visibility==='public'?'public':'private',name:String(cfg.roomName||'NEON ARENA').trim().slice(0,28)||'NEON ARENA',mode:MODES[cfg.mode]?cfg.mode:'duel',size:0,map:['plain','cover','maze'].includes(cfg.map)?cfg.map:'plain',pickups:cfg.pickups!==false,timer:[60,90,120,180].includes(Number(cfg.timer))?Number(cfg.timer):90,bots:cfg.bots!==false,clients:new Map(),players:[],bullets:[],items:[],walls:[],ball:{x:600,y:380,vx:0,vy:0,carrier:0},flags:[],scores:[0,0],state:'lobby',winner:null,timeLeft:0,lastItem:Date.now(),nextId:1,created:Date.now()};room.size=validSize(room.mode,Number(cfg.size));room.walls=mapWalls(room.map);rooms.set(c,room);return room}
+function validSize(mode,n){return MODES[mode].sizes.includes(n)?n:MODES[mode].sizes[0]}
+function teamFor(room,slot){if(room.mode==='duel'&&room.size===2)return slot===1?1:2;return Math.ceil(slot/(room.size/2))}
+function shipStats(type){if(type==='reactor')return {hp:125,speed:175,damage:18,ammo:3};if(type==='dash')return {hp:55,speed:430,damage:12,ammo:2};if(type==='laser')return {hp:72,speed:245,damage:10,ammo:6};return {hp:100,speed:245,damage:43,ammo:6}}
+function newPlayer(slot,name,room,ship='bolt',bot=false){const team=teamFor(room,slot),st=shipStats(ship);return {id:slot,slot,name,team,ship,x:team===1?125:WORLD.width-125,y:100+((slot-1)%Math.max(1,room.size/2))*((WORLD.height-200)/Math.max(1,room.size/2-1)),vx:0,vy:0,angle:team===1?0:Math.PI,hp:st.hp,maxHp:st.hp,shield:0,energy:0,ammo:st.ammo,ammoMax:st.ammo,alive:true,input:{},lastShot:0,charge:0,dashCooldown:0,burn:0,burnDps:0,burnTeam:0,bot,ready:false,score:0,carrying:false,respawn:0}}
+function roomSummary(r){return {code:r.code,name:r.name,visibility:r.visibility,mode:r.mode,size:r.size,map:r.map,pickups:r.pickups,timer:r.timer,bots:r.bots,players:r.clients.size,capacity:r.size,state:r.state,hostOnline:[...r.clients.values()].some(c=>c.slot===r.hostSlot),created:r.created}}
+function publicRooms(){return [...rooms.values()].filter(r=>r.visibility==='public'&&r.state!=='ended').map(roomSummary).sort((a,b)=>b.created-a.created).slice(0,80)}
+function broadcast(r,o){const d=JSON.stringify(o);for(const ws of r.clients.keys())if(ws.readyState===WebSocket.OPEN)ws.send(d)}
+function sendLobby(r){broadcast(r,{type:'room',room:roomSummary(r),players:r.players.map(p=>({slot:p.slot,name:p.name,team:p.team,ship:p.ship,ready:p.ready,bot:p.bot,hp:p.maxHp})),walls:r.walls})}
+function status(r,message){broadcast(r,{type:'status',state:r.state,message,winner:r.winner,timeLeft:r.timeLeft,scores:r.scores})}
+function reset(r){r.players=r.players.filter(p=>p.bot||r.clients.has([...r.clients.entries()].find(([,c])=>c.slot===p.slot)?.[0]));r.players.forEach(p=>{const fresh=newPlayer(p.slot,p.name,r,p.ship,p.bot);Object.assign(p,fresh)});r.bullets=[];r.items=[];r.walls=mapWalls(r.map);r.scores=[0,0];r.ball={x:600,y:380,vx:0,vy:0,carrier:0};r.flags=[{team:1,x:75,y:380,homeX:75,homeY:380,carrier:0},{team:2,x:1125,y:380,homeX:1125,homeY:380,carrier:0}];r.winner=null;r.timeLeft=r.timer;r.state='playing';r.lastItem=Date.now();for(const c of r.clients.values())c.ready=true;status(r,'MATCH STARTED');snap(r)}
+function lobbyStart(r){const real=r.clients.size;if(r.bots){for(let i=1;i<=r.size;i++){if(r.players.some(p=>p.slot===i))continue;if(r.players.length>=r.size)break;const ship=['bolt','reactor','dash'][Math.floor(Math.random()*3)];r.players.push(newPlayer(i,`BOT-${i}`,r,ship,true))}}if(r.players.length>=r.size&&[...r.clients.values()].every(c=>c.ready))reset(r);else {r.state='lobby';status(r,`${real}/${r.size} human pilots connected. Ready when you are.`);sendLobby(r)}}
+function snap(r){broadcast(r,{type:'state',room:roomSummary(r),state:r.state,winner:r.winner,timeLeft:r.timeLeft,scores:r.scores,world:WORLD,players:r.players.map(p=>({id:p.id,slot:p.slot,name:p.name,team:p.team,ship:p.ship,x:p.x,y:p.y,vx:p.vx,vy:p.vy,angle:p.angle,hp:p.hp,maxHp:p.maxHp,shield:p.shield,energy:p.energy,ammo:p.ammo,ammoMax:p.ammoMax,alive:p.alive,bot:p.bot,carrying:p.carrying})),bullets:r.bullets.map(b=>({...b})),items:r.items.map(i=>({...i})),walls:r.walls.map(w=>({...w})),ball:r.ball,flags:r.flags})}
+function nearest(r,p){let best=null,d0=Infinity;for(const q of r.players){if(q.team===p.team||!q.alive)continue;const d=Math.hypot(q.x-p.x,q.y-p.y);if(d<d0){best=q;d0=d}}return best}
+function hitWall(r,x,y,rad=16){return r.walls.find(w=>w.hp>0&&x+rad>w.x&&x-rad<w.x+w.w&&y+rad>w.y&&y-rad<w.y+w.h)}
+function damage(r,p,n,team,sourceSlot=0){if(p.ship==='reactor'){const reflect=Math.min(n*.35,p.energy*.18);p.energy=Math.min(100,p.energy+Math.min(15,n*.18));n-=reflect;const attacker=r.players.find(q=>q.slot===sourceSlot&&q.alive);if(attacker&&attacker.team!==p.team)attacker.hp=Math.max(0,attacker.hp-reflect)}if(p.shield>0){const a=Math.min(p.shield,n);p.shield-=a;n-=a}p.hp=Math.max(0,p.hp-n);if(p.hp<=0&&p.alive){p.alive=false;if(r.mode==='ball'&&p.carrying){p.carrying=false;r.ball.carrier=0}if(r.mode==='ctf'){p.carrying=false;for(const f of r.flags)if(f.carrier===p.slot){f.carrier=0;f.x=f.homeX;f.y=f.homeY}p.respawn=3;}else if(r.mode==='duel'&&!r.players.some(q=>q.team===p.team&&q.alive)){r.state='ended';r.winner=team;status(r,`TEAM ${team} WINS`)}}}
+function fire(r,p,c){if(r.state!=='playing'||!p.alive||p.ammo<=0||Date.now()-p.lastShot<240)return;p.lastShot=Date.now();p.ammo--;c=Math.max(0,Math.min(1,Number(c)||0));const boosted=p.ship==='reactor'?1+p.energy/160:1;const b={id:r.nextId++,owner:p.slot,team:p.team,x:p.x+Math.cos(p.angle)*22,y:p.y+Math.sin(p.angle)*22,vx:Math.cos(p.angle)*(p.ship==='dash'?760:520)+p.vx*.15,vy:Math.sin(p.angle)*(p.ship==='dash'?760:520)+p.vy*.15,life:1.5,damage:(p.ship==='dash'?12:p.ship==='reactor'?18:p.ship==='laser'?5+c*5:18+c*25)*boosted,kind:p.ship==='laser'?'laser':'bolt',charge:c};if(p.ship==='laser'){b.life=.16;b.vx=0;b.vy=0;b.x2=b.x+Math.cos(p.angle)*900;b.y2=b.y+Math.sin(p.angle)*900}r.bullets.push(b);if(p.ship==='reactor')p.energy=Math.max(0,p.energy-8)}
+function lineHit(x,y,x1,y1,x2,y2,dist){const dx=x2-x1,dy=y2-y1,l=dx*dx+dy*dy,t=l?Math.max(0,Math.min(1,((x-x1)*dx+(y-y1)*dy)/l)):0;return Math.hypot(x-(x1+t*dx),y-(y1+t*dy))<dist}
+function botThink(r,p,dt){const e=nearest(r,p);if(!e)return;p.angle=Math.atan2(e.y-p.y,e.x-p.x);const d=Math.hypot(e.x-p.x,e.y-p.y);p.input={up:false,down:false,left:false,right:false};if(d>260){p.input.right=Math.cos(p.angle)>0;p.input.left=Math.cos(p.angle)<0;p.input.down=Math.sin(p.angle)>0;p.input.up=Math.sin(p.angle)<0}else{p.input.up=Math.sin(p.angle)>0;p.input.down=Math.sin(p.angle)<0;p.input.left=Math.cos(p.angle)>0;p.input.right=Math.cos(p.angle)<0}if(Math.random()<dt*1.6)fire(r,p,.45+Math.random()*.5)}
+function update(r,dt){if(r.state!=='playing')return;r.timeLeft=Math.max(0,r.timeLeft-dt);for(const p of r.players){if(p.respawn>0){p.respawn-=dt;if(p.respawn<=0){p.alive=true;p.hp=p.maxHp;p.x=p.team===1?125:1075;p.y=100+Math.random()*560}continue}if(!p.alive)continue;if(p.burn>0){const burnDt=Math.min(dt,p.burn);damage(r,p,p.burnDps*burnDt,p.burnTeam,p.burnOwner||0);p.burn-=burnDt;if(p.burn<=0){p.burn=0;p.burnDps=0}}if(!p.alive)continue;if(p.bot)botThink(r,p,dt);if(p.ship==='reactor')p.energy=Math.min(100,p.energy+dt*7);if(p.dashCooldown>0)p.dashCooldown-=dt;const i=p.input||{};let ax=(i.right?1:0)-(i.left?1:0),ay=(i.down?1:0)-(i.up?1:0),n=Math.hypot(ax,ay);if(n){ax/=n;ay/=n}const st=shipStats(p.ship);p.vx+=ax*st.speed*3*dt;p.vy+=ay*st.speed*3*dt;const max=st.speed;const sp=Math.hypot(p.vx,p.vy);if(sp>max){p.vx=p.vx/sp*max;p.vy=p.vy/sp*max}p.vx*=Math.pow(.025,dt);p.vy*=Math.pow(.025,dt);let nx=Math.max(22,Math.min(WORLD.width-22,p.x+p.vx*dt)),ny=Math.max(22,Math.min(WORLD.height-22,p.y+p.vy*dt));if(!hitWall(r,nx,p.y))p.x=nx;else p.vx=0;if(!hitWall(r,p.x,ny))p.y=ny;else p.vy=0;const e=nearest(r,p);if(e)p.angle=Math.atan2(e.y-p.y,e.x-p.x);p.ammo=Math.min(p.ammoMax,p.ammo+dt*(p.ship==='reactor'?.16:.65));if(p.ship==='dash'&&i.dash&&p.dashCooldown<=0){p.vx+=Math.cos(p.angle)*600;p.vy+=Math.sin(p.angle)*600;p.dashCooldown=2.5}}
+for(let j=r.bullets.length-1;j>=0;j--){const b=r.bullets[j];b.life-=dt;if(b.kind==='laser'){let blockDist=Infinity,blockWall=null;const dx=b.x2-b.x,dy=b.y2-b.y,len=Math.hypot(dx,dy);for(let d=0;d<=len;d+=6){const xx=b.x+dx/len*d,yy=b.y+dy/len*d;const wall=r.walls.find(w=>w.hp>0&&xx>=w.x&&xx<=w.x+w.w&&yy>=w.y&&yy<=w.y+w.h);if(wall){blockDist=d;blockWall=wall;break}}if(blockWall)blockWall.hp=Math.max(0,blockWall.hp-b.damage*8);for(const q of r.players){if(q.team===b.team||!q.alive||!lineHit(q.x,q.y,b.x,b.y,b.x2,b.y2,20))continue;const along=(q.x-b.x)*dx/len+(q.y-b.y)*dy/len;if(along>blockDist)continue;if(b.charge>=.98){damage(r,q,1000,b.team,b.owner);q.burn=0;q.burnDps=0}else{damage(r,q,b.damage,b.team,b.owner);q.burn=2.5;q.burnDps=3+b.charge*3;q.burnTeam=b.team;q.burnOwner=b.owner}break}r.bullets.splice(j,1);continue}b.x+=b.vx*dt;b.y+=b.vy*dt;const wall=hitWall(r,b.x,b.y,4);if(wall){wall.hp=Math.max(0,wall.hp-b.damage*8);r.bullets.splice(j,1);continue}const target=r.players.find(q=>q.team!==b.team&&q.alive&&Math.hypot(q.x-b.x,q.y-b.y)<20);if(target){damage(r,target,b.damage,b.team,b.owner);r.bullets.splice(j,1);continue}if(b.life<=0||b.x<0||b.x>WORLD.width||b.y<0||b.y>WORLD.height)r.bullets.splice(j,1)}
+if(r.pickups&&r.pickups!==false){}if(r.pickupsEnabled===undefined)r.pickupsEnabled=r.pickups;if(r.pickupsEnabled&&Date.now()-r.lastItem>8500&&r.items.length<3){r.lastItem=Date.now();r.items.push({id:r.nextId++,type:Math.random()<.5?'shield':'boost',x:70+Math.random()*1060,y:60+Math.random()*640,life:15})}for(let j=r.items.length-1;j>=0;j--){const it=r.items[j];it.life-=dt;const p=r.players.find(q=>q.alive&&Math.hypot(q.x-it.x,q.y-it.y)<30);if(p){if(it.type==='shield')p.shield=Math.min(80,p.shield+40);else p.energy=Math.min(100,p.energy+30);r.items.splice(j,1)}else if(it.life<=0)r.items.splice(j,1)}
+if(r.mode==='ball'){const carrier=r.players.find(p=>p.carrying&&p.alive);if(carrier){r.ball.x=carrier.x;r.ball.y=carrier.y+22;r.ball.vx=carrier.vx;r.ball.vy=carrier.vy;const goal=carrier.team===1?1100:100;if(Math.abs(carrier.x-goal)<45&&Math.abs(carrier.y-380)<100){r.scores[carrier.team-1]++;carrier.carrying=false;r.ball.carrier=0;r.ball.x=600;r.ball.y=380;status(r,`GOAL! TEAM ${carrier.team}`)}}else{r.ball.x+=r.ball.vx*dt;r.ball.y+=r.ball.vy*dt;r.ball.vx*=Math.pow(.15,dt);r.ball.vy*=Math.pow(.15,dt);if(r.ball.x<25||r.ball.x>1175)r.ball.vx*=-.7;if(r.ball.y<25||r.ball.y>735)r.ball.vy*=-.7;const p=r.players.find(q=>q.alive&&Math.hypot(q.x-r.ball.x,q.y-r.ball.y)<28);if(p){p.carrying=true;r.ball.carrier=p.slot}}}
+if(r.mode==='ctf'){for(const f of r.flags){if(f.carrier){const p=r.players.find(q=>q.slot===f.carrier&&q.alive);if(p){f.x=p.x;f.y=p.y}else{f.carrier=0;f.x=f.homeX;f.y=f.homeY}}else{const p=r.players.find(q=>q.alive&&q.team!==f.team&&Math.hypot(q.x-f.x,q.y-f.y)<24);if(p){f.carrier=p.slot;p.carrying=true}}}for(const p of r.players)if(p.carrying){const enemy=r.flags.find(f=>f.team!==p.team&&f.carrier===p.slot),own=r.flags.find(f=>f.team===p.team);if(enemy&&own.carrier===0&&Math.hypot(p.x-own.homeX,p.y-own.homeY)<45){r.scores[p.team-1]++;enemy.carrier=0;enemy.x=enemy.homeX;enemy.y=enemy.homeY;p.carrying=false;status(r,`FLAG CAPTURED BY TEAM ${p.team}`)}}}
+if(r.timeLeft<=0){r.state='ended';r.winner=r.scores[0]===r.scores[1]?0:r.scores[0]>r.scores[1]?1:2;status(r,r.winner?`TEAM ${r.winner} WINS`:'DRAW')}if(r.mode==='duel'&&!r.players.some(p=>p.team===1&&p.alive)||r.mode==='duel'&&!r.players.some(p=>p.team===2&&p.alive)){r.state='ended';if(r.winner===null)r.winner=r.players.some(p=>p.team===1&&p.alive)?1:2;status(r,`TEAM ${r.winner} WINS`)}}
+function cleanRoom(r){if(!r.clients.size&&Date.now()-r.created>600000)rooms.delete(r.code)}
+wss.on('connection',ws=>{let client=null;ws.on('message',raw=>{let m;try{m=JSON.parse(raw)}catch{return}if(!m||typeof m.type!=='string')return;if(m.type==='list'){send(ws,{type:'rooms',rooms:publicRooms()});return}if(m.type==='create'){if(client)return;if(rooms.size>=MAX_ROOMS)return send(ws,{type:'error',message:'Room capacity reached.'});const name=String(m.name||'Pilot').trim().slice(0,20)||'Pilot';const r=createRoom(m.settings||{},name);const p=newPlayer(1,name,r);r.players.push(p);client={ws,slot:1,room:r,ready:false,input:{},name};r.clients.set(ws,client);send(ws,{type:'welcome',slot:1,code:r.code,host:true,room:roomSummary(r)});sendLobby(r);status(r,r.visibility==='public'?'Public room created. Waiting for pilots.':'Private room created. Share the code.');return}if(m.type==='join'){if(client)return;const code=String(m.code||'').toUpperCase().replace(/[^A-Z0-9]/g,'');const r=rooms.get(code);if(!r)return send(ws,{type:'error',message:'Room not found.'});if(r.state==='playing')return send(ws,{type:'error',message:'That match is already running.'});if(r.clients.size>=r.size)return send(ws,{type:'error',message:'Room is full.'});const slot=Array.from({length:r.size},(_,i)=>i+1).find(n=>!r.players.some(p=>p.slot===n));const name=String(m.name||`Pilot ${slot}`).trim().slice(0,20)||`Pilot ${slot}`;const p=newPlayer(slot,name,r);r.players.push(p);client={ws,slot,room:r,ready:false,input:{},name};r.clients.set(ws,client);send(ws,{type:'welcome',slot,code:r.code,host:false,room:roomSummary(r)});sendLobby(r);status(r,`${name} joined.`);return}if(!client)return send(ws,{type:'error',message:'Create or join a room first.'});const r=client.room,p=r.players.find(q=>q.slot===client.slot);if(m.type==='chooseShip'&&r.state==='lobby'&&p){p.ship=['bolt','laser','reactor','dash'].includes(m.ship)?m.ship:'bolt';const st=shipStats(p.ship);p.maxHp=st.hp;p.hp=st.hp;client.ready=false;p.ready=false;sendLobby(r)}else if(m.type==='ready'&&r.state==='lobby'){client.ready=m.ready===true;if(p)p.ready=client.ready;if(client.ready&&client.slot===r.hostSlot&&r.bots)lobbyStart(r);else if([...r.clients.values()].every(c=>c.ready)&&r.clients.size>=r.size)reset(r);else sendLobby(r)}else if(m.type==='input'){const i=m.input||{};client.input={up:i.up===true,down:i.down===true,left:i.left===true,right:i.right===true,dash:i.dash===true};if(p)p.input=client.input}else if(m.type==='shoot')fire(r,p,Number(m.charge)||0);else if(m.type==='settings'&&client.slot===r.hostSlot&&r.state==='lobby'){const s=m.settings||{};const requestedMode=MODES[s.mode]?s.mode:r.mode;const requestedSize=validSize(requestedMode,Number(s.size));if(r.clients.size>requestedSize){send(ws,{type:'error',message:'Cannot reduce room capacity below the number of connected players.'});return}if(s.map&&['plain','cover','maze'].includes(s.map))r.map=s.map;if(typeof s.pickups==='boolean')r.pickups=r.pickupsEnabled=s.pickups;if([60,90,120,180].includes(Number(s.timer)))r.timer=Number(s.timer);if(s.visibility&&['public','private'].includes(s.visibility))r.visibility=s.visibility;if(s.mode&&MODES[s.mode]){r.mode=s.mode;r.size=validSize(r.mode,Number(s.size));r.players=[];for(const c of r.clients.values()){c.ready=false;const nm=String(c.name||'Pilot');r.players.push(newPlayer(c.slot,nm,r));}}if(s.size!==undefined)r.size=validSize(r.mode,Number(s.size));if(typeof s.bots==='boolean')r.bots=s.bots;r.players=r.players.filter(p=>p.slot<=r.size);for(const c of r.clients.values())if(!r.players.some(p=>p.slot===c.slot))r.players.push(newPlayer(c.slot,c.name||'Pilot',r));r.walls=mapWalls(r.map);sendLobby(r);send(ws,{type:'settingsSaved',room:roomSummary(r)})}else if(m.type==='restart'&&r.state==='ended'&&client.slot===r.hostSlot){for(const c of r.clients.values())c.ready=false;r.players.forEach(p=>p.ready=false);r.state='lobby';lobbyStart(r)}else if(m.type==='list')send(ws,{type:'rooms',rooms:publicRooms()})});ws.on('close',()=>{if(!client)return;const r=client.room;r.clients.delete(ws);r.players=r.players.filter(p=>p.slot!==client.slot);if(!r.clients.size){rooms.delete(r.code);return}if(r.state==='playing'){r.state='lobby';r.bullets=[];r.items=[];r.players.forEach(p=>{p.alive=true;p.hp=p.maxHp;p.carrying=false})}if(client.slot===r.hostSlot){r.hostSlot=[...r.clients.values()][0]?.slot||1;status(r,'Host disconnected; room control transferred.')}sendLobby(r);broadcast(r,{type:'rooms',rooms:publicRooms()})});ws.on('error',()=>{})});
+setInterval(()=>{const now=Date.now();for(const r of rooms.values()){update(r,TICK/1000);snap(r);cleanRoom(r)}},TICK);setInterval(()=>{const data=JSON.stringify({type:'rooms',rooms:publicRooms()});for(const ws of wss.clients)if(ws.readyState===WebSocket.OPEN)ws.send(data)},3000);
+httpServer.listen(PORT,HOST,()=>console.log(`NEON DUEL v3 listening on ${HOST}:${PORT}`));
