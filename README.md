@@ -1,4 +1,4 @@
-# NEON DUEL Online — v3.0
+# NEON DUEL Online — v3.1
 
 A server-authoritative real-time multiplayer arena game built with Node.js, WebSockets, HTML, CSS and Canvas. Designed for desktop and mobile browsers.
 
@@ -75,3 +75,14 @@ This is a substantial playable v3 foundation, not a professionally balanced rele
 - Rooms with bot fill enabled can accept players during a live match by replacing a bot. The incoming player chooses a ship and readies before taking control.
 - Leave button is locked for 20 seconds after joining and again when a match starts.
 - Destructible walls visibly change color and show cracks as their durability falls; labyrinth geometry has been revised.
+
+
+## v3.1 social features
+
+- Every browser player receives a numeric player ID starting at `0`, stored with a random browser token.
+- Add friends by exact username or numeric ID; adding is mutual.
+- Global leaderboard ranks player profiles by total score and then kills; bots are excluded.
+- Six separate public chat channels: English, French, Turkish, Russian, Chinese and Indonesian. These are separate rooms, but messages are not language-filtered.
+- Friends chat is visible only to the sender and their friends. No chat UI is present inside a game room.
+- Chat history and profile stats are stored in `data/social.json` on the server. On a local server this survives restarts as long as the folder is kept. On Render, attach a persistent disk and store this file on that disk if IDs, stats and chat history must survive redeploys/restarts; an ephemeral filesystem can be reset.
+- This first social version uses browser-stored identity tokens, not passwords or verified accounts. Clearing browser storage loses that browser's token unless the server-side token is recovered manually.

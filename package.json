@@ -1,8 +1,8 @@
 {
   "name": "neon-duel-online",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "private": true,
-  "description": "NEON DUEL v3 real-time multiplayer arena game",
+  "description": "NEON DUEL v3.1 real-time multiplayer arena game with social features",
   "main": "server.js",
   "scripts": { "start": "node server.js" },
   "engines": { "node": ">=18" },
