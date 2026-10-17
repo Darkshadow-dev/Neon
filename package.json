@@ -1,10 +1,16 @@
 {
   "name": "neon-duel-online",
-  "version": "3.1.0",
+  "version": "4.0.0",
   "private": true,
-  "description": "NEON DUEL v3.1 real-time multiplayer arena game with social features",
+  "description": "NEON DUEL with persistent local friend DMs",
   "main": "server.js",
-  "scripts": { "start": "node server.js" },
-  "engines": { "node": ">=18" },
-  "dependencies": { "ws": "^8.18.0" }
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "ws": "^8.18.3"
+  }
 }
