@@ -1,0 +1,2974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="Images/Website-Guide.png">
+
+<title>Arduino Guide</title>
+
+<link rel="stylesheet" href="css/main.css">
+
+
+</head>
+<body>
+<div>
+
+
+<div id="header"></div>
+<div id="rotateWarning">
+  <div class="rotate-box">
+    <h2>🔄 Rotate Device</h2>
+    <p>Only use in landscape mode!</p>
+  </div>
+</div>
+<main>
+
+  <h1>CONTACT US</h1>
+  <p>Arduino Guide - Community Support</p>
+<div class="mini-nav">
+  <a href="#about">About</a>
+  <a href="#contact">Contact</a>
+  <a href="#feedback">Feedback</a>
+  <a href="#download-pdf">Download</a>
+  <a href="#update">Update</a>
+</div>
+
+
+<section id="about" class="page active">
+
+  <h2>Arduino Guide</h2>
+    A visual, offline-friendly way to learn Arduino.
+  </p>
+
+  <p>
+    <b>Arduino Guide</b> is a community-driven project designed to explain
+    Arduino in a simple and visual way.
+    No boring theory — only real examples, wiring, and code.
+  </p>
+
+  <p>
+    This site is built for beginners and self-learners who want to
+    understand electronics by actually <b>seeing</b> how things connect.
+  </p>
+
+  <p>
+    Instead of reading long manuals, you learn by clicking, exploring,
+    and understanding both <b>hardware</b> and <b>code</b> at the same time.
+  </p>
+
+  <p>
+    The guide focuses on <b>clarity</b>, <b>speed</b>, and <b>simplicity</b>.
+    Everything runs in a single lightweight website that works offline
+    and even on older computers.
+  </p>
+
+  <details open>
+    <summary>What You Will Learn</summary>
+    <ul>
+      <li>What each Arduino pin does and when to use it</li>
+      <li>How code controls real electronic components</li>
+      <li>How to connect LEDs, buttons, sensors, motors, and displays</li>
+      <li>How Arduino communicates using Serial, I²C, and SPI</li>
+    </ul>
+  </details>
+
+  <div style="height:5vh;"></div>
+
+  <details>
+    <summary>How This Guide Works</summary>
+    <p>
+      The guide is built around <b>visual interaction</b>.
+      You can click on pins, open examples, and read explanations
+      directly next to the hardware they belong to.
+    </p>
+
+    <ul>
+      <li>Click pins on the board to see their purpose</li>
+      <li>Select pin groups to highlight related functionality</li>
+      <li>Open code examples with line-by-line explanations</li>
+      <li>View wiring diagrams drawn in a simple MS Paint style</li>
+    </ul>
+  </details>
+
+  <div style="height:5vh;"></div>
+
+  <details>
+    <summary>Who This Guide Is For</summary>
+    <ul>
+      <li>Beginners learning Arduino for the first time</li>
+      <li>People who prefer visual learning over long documentation</li>
+      <li>Students, hobbyists, and self-taught makers</li>
+      <li>Anyone who wants a fast, offline Arduino reference</li>
+    </ul>
+  </details>
+
+  <div style="height:5vh;"></div>
+
+  <details>
+    <summary>Why This Guide Is Different</summary>
+    <p>
+      Most Arduino tutorials explain code or hardware separately.
+      This guide shows <b>both together</b>, so you understand
+      <i>why</i> something works — not just <i>how</i>.
+    </p>
+
+    <p>
+      No frameworks. No heavy scripts. No clutter.
+      Just clear explanations, visual learning, and practical examples.
+    </p>
+
+    <p>
+      Use the menu to explore the board, pins, examples, and wiring diagrams.
+      Start anywhere and learn at your own pace.
+    </p>
+  </details>
+
+</section>
+
+<section id="update" class="page">
+
+<div class="addon-card">
+
+  <div class="addon-header">
+    <h2 class="addon-title">We're Back</h2>
+    <span class="addon-version">v2.1</span>
+  </div>
+
+  <!-- SHORT VERSION -->
+  <details class="addon-details">
+    <summary class="addon-summary">Short updates (click to expand)</summary>
+
+    <ul class="addon-features">
+      <li><strong>After a long break — development is back.</strong></li>
+      <li>~5 months since major development work</li>
+      <li>~3 months since the last update log</li>
+
+      <li>Home page CSS and animations improved</li>
+      <li>Home page reworked again</li>
+      <li>New Examples details/toggle system</li>
+
+      <li>Accounts finally added after many attempts</li>
+      <li>Simple shareable document-based account system</li>
+
+      <li>Navigation redesigned</li>
+      <li>Navigation names updated</li>
+      <li>Extended dropdown redesigned</li>
+
+      <li>Tutorials finally added and made functional</li>
+
+      <li><strong>25,000+ lines of code reached</strong></li>
+      <li>Code Beta → Editor v1 introduced</li>
+      <li>Simulator added to Editor v1 — currently not fully working</li>
+
+      <li>Large external project paused</li>
+      <li>Development focus returned to Arduino Guide</li>
+
+      <li>More changes and fixes still remain</li>
+      <li>Arduino Guide development continues</li>
+
+      <li>09/11/2026 — 12:12 AM</li>
+    </ul>
+  </details>
+
+  <!-- LONG VERSION -->
+  <details class="addon-details">
+    <summary class="addon-summary">Full log (click to expand)</summary>
+
+    <div class="addon-content">
+
+      <p class="addon-desc">
+        Hello again. After a very long break, development on the Arduino Guide has finally started again.
+        It has been around five months since real development work was done and around three months since
+        the previous update was written.
+      </p>
+
+      <p class="addon-desc">
+        A lot has changed during that time, to the point where I honestly forgot exactly what happened.
+        So this update is more of a quick return report than a complete history of everything that changed.
+      </p>
+
+      <p class="addon-desc">
+        The Home page received another redesign, including better CSS, improved animations, and additional
+        visual changes.
+      </p>
+
+      <p class="addon-desc">
+        The Examples section received a new details/toggle system to make the page easier to navigate
+        and explore.
+      </p>
+
+      <p class="addon-desc">
+        Accounts have finally been added after many attempts, testing, and trial and error.
+        For now, the system is intentionally simple and is based around a created document that can
+        be shared. What happens with the system in the future is still undecided.
+      </p>
+
+      <p class="addon-desc">
+        The navigation system was redesigned, new names were introduced, and the extended dropdown
+        system received another major redo.
+      </p>
+
+      <p class="addon-desc">
+        Tutorials were finally worked on and now exist as an actual part of the guide.
+        They are still somewhat unfinished, but the system is finally there and ready for more work.
+      </p>
+
+      <p class="addon-desc">
+        The entire guide has now passed <strong>25,000 lines of code</strong>.
+        This is a major milestone for the project considering how much of it has been developed alone.
+      </p>
+
+      <p class="addon-desc">
+        Code Beta has also changed into <strong>Editor v1</strong>.
+        A simulator has been added to the editor. It is currently not fully functional,
+        but the system is there and further work can continue from it.
+      </p>
+
+      <p class="addon-desc">
+        The large project that previously took the main development focus has been stopped for now.
+        Development has returned to the Arduino Guide.
+      </p>
+
+      <p class="addon-desc">
+        Summer is almost over, but that does not really matter anymore.
+        The guide is back in development.
+      </p>
+
+      <p class="addon-desc">
+        There is still more work left to do, but this is only a quick return update.
+        More detailed updates will follow as development continues.
+      </p>
+
+      <p class="addon-desc">
+        The guide might be finished by 2027 — or maybe not.
+        It is Arduino, after all. There is always something else that can be added.
+      </p>
+
+      <p class="addon-desc">
+        After months away, it is genuinely good to be back.
+        We're doing this again. YAY!
+        it's 12:21 and i read this found one mistake in previus report fixed so lets go to more work jk lets go sleep 22.
+      </p>
+
+      <p class="addon-desc">
+        <strong>09/11/2026 — 12:12 AM</strong>
+      </p>
+
+    </div>
+
+  </details>
+
+</div>
+
+
+<div class="addon-card">
+
+  <div class="addon-header">
+    <h2 class="addon-title">Final Project Status Update</h2>
+    <span class="addon-version">v2.0</span>
+  </div>
+
+  <!-- SHORT VERSION -->
+  <details class="addon-details">
+    <summary class="addon-summary">Short updates (click to expand)</summary>
+
+    <ul class="addon-features">
+      <li>Major development phase is now complete</li>
+      <li>Guide core system finished</li>
+
+      <li>Remaining work is minimal (~30 minutes estimated)</li>
+      <li>~80 lines of code left</li>
+
+      <li>Community project moved outside main guide scope</li>
+
+      <li>Hardware Visual improvements continue separately</li>
+      <li>Tutorial expansion continues independently</li>
+
+      <li>Feedback v2.0 will be last for a long time</li>
+      <li>Quizzes development stopped</li>
+      <li>Code Beta development stopped</li>
+
+      <li>Overall: 4/30 modules still active</li>
+
+      <li>Project duration: ~130 days</li>
+      <li>Total work: ~570–640 hours</li>
+
+      <li>Solo development note: major workload completed alone</li>
+    </ul>
+  </details>
+
+  <!-- LONG VERSION -->
+  <details class="addon-details">
+    <summary class="addon-summary">Full log (click to expand)</summary>
+
+    <div class="addon-content">
+
+      <p class="addon-desc">
+        A lot has been accomplished over the course of development.
+        In recent days, active work has started to slow down significantly.
+      </p>
+
+      <p class="addon-desc">
+        The main reason is simple: the core guide is now essentially finished.
+      </p>
+
+      <p class="addon-desc">
+        Remaining tasks are extremely small — estimated at under 30 minutes of work
+        and roughly 80 lines of code.
+      </p>
+
+      <p class="addon-desc">
+        The remaining systems are no longer part of the main guide itself.
+        The community website has been separated into its own project,
+        and will continue independently.
+      </p>
+
+      <p class="addon-desc">
+        Hardware Visual improvements and tutorial expansions will still continue,
+        but at their own pace and no longer as part of the main structured development cycle.
+      </p>
+
+      <p class="addon-desc">
+        In simple terms: the guide is complete.
+      </p>
+
+      <p class="addon-desc">
+        Feedback system version 2.0 will not be the final update,
+        but it will likely be the last major update for a long period of time.
+      </p>
+
+      <p class="addon-desc">
+        Quiz system development has been stopped, and Code Beta development is also paused.
+        Future changes will continue in an unstructured, maintenance-based form.
+      </p>
+
+      <p class="addon-desc">
+        Out of the full system, approximately 4 out of 30 parts are still actively evolving.
+        The rest are considered complete or stable.
+      </p>
+
+      <p class="addon-desc">
+        Development started on 08/02/2026 and continued until 11/06/2026,
+        spanning roughly 130 days of work.
+      </p>
+
+      <p class="addon-desc">
+        Total time invested is estimated between 570 and 640 hours.
+      </p>
+
+      <p class="addon-desc">
+        Solo development note: building and maintaining this system alone has been a significant challenge.
+      </p>
+
+      <p class="addon-desc">
+        New focus will shift toward a larger future project developed solo again.
+      </p>
+
+      <p class="addon-desc">
+        See you soon ;) hopefully...
+      </p>
+
+    </div>
+
+  </details>
+
+</div>
+
+<div class="addon-card">
+
+  <div class="addon-header">
+    <h2 class="addon-title">Massive Site Rework</h2>
+    <span class="addon-version">v1.9</span>
+  </div>
+
+  <!-- SHORT VERSION -->
+  <details class="addon-details">
+    <summary class="addon-summary">Short updates (click to expand)</summary>
+
+    <ul class="addon-features">
+      <li>Hardware Visual page fully redesigned</li>
+      <li>Gallery-style image system added</li>
+
+      <li>All images now support zoom</li>
+
+      <li>Every page received CSS reworks</li>
+      <li>Website made faster + simpler</li>
+
+      <li>Examples page expanded again</li>
+
+      <li>“More of all” received 3 new links</li>
+
+      <li>Arduino CLI download script page added</li>
+      <li>Guide overview pages added</li>
+
+      <li>3+ months of development reflected</li>
+      <li>~150–300h+ spent developing</li>
+
+      <li>Guide entering final development stage</li>
+      <li>Estimated 15–32h remaining</li>
+
+      <li>20/05/2026 — 01:23 AM</li>
+    </ul>
+  </details>
+
+  <!-- LONG VERSION -->
+  <details class="addon-details">
+    <summary class="addon-summary">Full log (click to expand)</summary>
+
+    <div class="addon-content">
+
+      <p class="addon-desc">
+        Version 1.9 includes one of the biggest redesigns made so far across the entire guide.
+      </p>
+
+      <p class="addon-desc">
+        The Hardware Visual page received a complete gallery-style redesign.
+        All images now support zoom interactions and improved visual presentation.
+      </p>
+
+      <p class="addon-desc">
+        Every major page across the guide has been reworked with cleaner CSS,
+        faster loading, simpler layouts, and improved structure overall.
+      </p>
+
+      <p class="addon-desc">
+        The Examples page was expanded again and received another redesign pass.
+      </p>
+
+      <p class="addon-desc">
+        “More of all” was redesigned like the rest of the website and gained 3 new pages.
+      </p>
+
+      <p class="addon-desc">
+        One of the new pages introduces an Arduino CLI download script.
+        Instead of explaining how to install Arduino CLI manually,
+        the script helps automate the process.
+      </p>
+
+      <p class="addon-desc">
+        Additional pages were created to talk about the guide itself,
+        including development thoughts, project progress,
+        and what the guide means after months of work.
+      </p>
+
+      <p class="addon-desc">
+        Around 150–300+ hours have now been spent coding, debugging,
+        styling, image creation, testing, and rebuilding systems.
+      </p>
+
+      <p class="addon-desc">
+        The guide is now entering its final major development stage,
+        with approximately 15–32 hours of work remaining before completion.
+      </p>
+
+      <p class="addon-desc">
+        Written at 01:23 AM — 20/05/2026.
+      </p>
+
+    </div>
+
+  </details>
+
+</div>
+
+<div class="addon-card">
+
+  <div class="addon-header">
+    <h2 class="addon-title">Development Status</h2>
+    <span class="addon-version">v1.8.5</span>
+  </div>
+
+  <details class="addon-details">
+    <summary class="addon-summary">Short update</summary>
+
+    <ul class="addon-features">
+      <li>10-day next update planned</li>
+      <li>3-day break scheduled</li>
+      <li>Heavy workload ongoing</li>
+      <li>Long-term expansion planned</li>
+    </ul>
+  </details>
+
+</div>
+
+<div class="addon-card">
+
+  <div class="addon-header">
+    <h2 class="addon-title">System Rebuild</h2>
+    <span class="addon-version">v1.8.4</span>
+  </div>
+
+  <details class="addon-details">
+    <summary class="addon-summary">Short update</summary>
+
+    <ul class="addon-features">
+      <li>Full CSS + JS rewrite (PC + mobile)</li>
+      <li>Mobile testing currently limited</li>
+      <li>Community upgraded to early beta</li>
+      <li>Load-more system partially broken</li>
+      <li>Project in semi-stable beta state</li>
+    </ul>
+  </details>
+
+</div>
+
+<div class="addon-card">
+
+  <div class="addon-header">
+    <h2 class="addon-title">Main UI Rework</h2>
+    <span class="addon-version">v1.8.3</span>
+  </div>
+
+  <details class="addon-details">
+    <summary class="addon-summary">Short update</summary>
+
+    <ul class="addon-features">
+      <li>Main page redesigned</li>
+      <li>New button styles + animations</li>
+      <li>Navigation animations fixed</li>
+      <li>Info card system added</li>
+      <li>Board + Examples fully remade</li>
+    </ul>
+  </details>
+
+</div>
+
+<div class="addon-card">
+
+  <div class="addon-header">
+    <h2 class="addon-title">Feedback System Update</h2>
+    <span class="addon-version">v1.8.2</span>
+  </div>
+
+  <details class="addon-details">
+    <summary class="addon-summary">Short update</summary>
+
+    <ul class="addon-features">
+      <li>Multi-stage feedback system introduced</li>
+      <li>Version chain system (1.7.1 / 1.7.2 etc.)</li>
+      <li>Multiple update types now supported</li>
+      <li>More structured change tracking</li>
+    </ul>
+  </details>
+
+</div>
+
+<div class="addon-card">
+
+  <div class="addon-header">
+    <h2 class="addon-title">Content Expansion Plan</h2>
+    <span class="addon-version">v1.8.1</span>
+  </div>
+
+  <details class="addon-details">
+    <summary class="addon-summary">Short update</summary>
+
+    <ul class="addon-features">
+      <li>Tutorials: 222 → 1k–2.5k lines expected</li>
+      <li>Examples: 600 → 700–800 lines</li>
+      <li>Server stays small (~202 lines)</li>
+      <li>CLI and docs planned for later stage</li>
+    </ul>
+  </details>
+
+</div>
+
+<div class="addon-card">
+
+  <div class="addon-header">
+    <h2 class="addon-title">Project Scale Update</h2>
+    <span class="addon-version">v1.7.0</span>
+  </div>
+
+  <details class="addon-details">
+    <summary class="addon-summary">Short update</summary>
+
+    <ul class="addon-features">
+      <li>Total code: 10,219 lines</li>
+      <li>Project growing fast across all modules</li>
+      <li>Mobile CSS + JS planned for all pages</li>
+      <li>Major structure expansion incoming</li>
+    </ul>
+  </details>
+
+</div>
+
+<div class="addon-card">
+
+  <div class="addon-header">
+    <h2 class="addon-title">Hardware Visual Rework</h2>
+    <span class="addon-version">v1.6</span>
+  </div>
+
+  <!-- SHORT VERSION -->
+  <details class="addon-details">
+    <summary class="addon-summary">Short updates (click to expand)</summary>
+
+    <ul class="addon-features">
+      <li>Hardware Visual page fully reworked</li>
+      <li>New gallery-style layout added</li>
+
+      <li>Arrow navigation implemented</li>
+      <li>Zoom in/out animations working</li>
+
+      <li>Multiple bugs fixed</li>
+
+      <li>Mobile CSS/JS improvements planned</li>
+
+      <li>Left-side expansion planned (more content)</li>
+      <li>More visual examples planned</li>
+
+      <li>Examples page expansion planned</li>
+      <li>Hardware experiments (joystick, voltage tests)</li>
+
+      <li>Beginner side + “More of all” focus ongoing</li>
+
+      <li>CLI download moved to detailed category</li>
+      <li>Documentation system planned</li>
+
+      <li>1–3 month development target</li>
+      <li>~300–400 hours estimated work</li>
+      <li>Potential 15k+ lines of code</li>
+    </ul>
+  </details>
+
+  <!-- LONG VERSION -->
+  <details class="addon-details">
+    <summary class="addon-summary">Full log (click to expand)</summary>
+
+    <div class="addon-content">
+
+      <p class="addon-desc">
+        The Hardware Visual page has been reworked into a new gallery-style system.
+        This update includes redesigned navigation, improved layout structure, and visual enhancements.
+      </p>
+
+      <p class="addon-desc">
+        Arrow-based navigation has been added, along with working zoom in/out animations.
+        Several issues were encountered during development but have been fixed.
+      </p>
+
+      <p class="addon-desc">
+        Future improvements are planned for mobile CSS and JavaScript support to ensure
+        compatibility across devices.
+      </p>
+
+      <p class="addon-desc">
+        The left-side panel is planned to be expanded with more content and additional visual examples.
+      </p>
+
+      <p class="addon-desc">
+        More examples are planned for the Examples page, along with hardware-based experiments
+        such as joystick input tests and voltage measurement demonstrations.
+      </p>
+
+      <p class="addon-desc">
+        Current focus is on completing the Beginner section and the “More of all” system.
+      </p>
+
+      <p class="addon-desc">
+        The Arduino CLI download will be placed in a detailed category along with extended documentation features.
+      </p>
+
+      <p class="addon-desc">
+        Estimated development time for upcoming work is 1–3 months, with approximately
+        300–400 hours of total work planned and potentially 15,000+ lines of code.
+      </p>
+
+      <p class="addon-desc">
+        Additional updates will continue for Code Beta and other system improvements.
+      </p>
+
+      <p class="addon-desc">
+        This update mainly focuses on the Hardware Visual rework, but further work will continue immediately after writing.
+      </p>
+
+    </div>
+
+  </details>
+
+</div>
+
+
+
+<div class="addon-card">
+
+  <div class="addon-header">
+    <h2 class="addon-title">More Section Completion</h2>
+    <span class="addon-version">v1.5
+</span>
+  </div>
+
+  <!-- SHORT VERSION -->
+  <details class="addon-details">
+    <summary class="addon-summary">Short updates (click to expand)</summary>
+
+    <ul class="addon-features">
+      <li>“More” section finished</li>
+      <li>New text content added</li>
+      <li>Zoom box feature added</li>
+
+      <li>~10 hours of work</li>
+
+      <li>Removed unused Hardware Visual showcases</li>
+      <li>Stepper + DC motor demos removed</li>
+      <li>Name wasn't “motor” but “Mortor”</li>
+
+      <li>Arduino CLI download idea (uncertain placement)</li>
+      <li>Mobile CSS currently broken</li>
+
+      <li>Beginner side focus planned (Home, Dropdown, Examples)</li>
+      <li>Community skipped (for now)</li>
+      <li>Code beta minor update planned</li>
+      <li>More quizzes coming</li>
+
+      <li>“More of all” dropdown expansion planned</li>
+
+      <li>Advanced features undecided</li>
+      <li>CLI likely too advanced for most users</li>
+
+      <li>Solo development note</li>
+      <li>Future community message added</li>
+
+      <li>05/05/2026 — 22:41</li>
+    </ul>
+  </details>
+
+  <!-- LONG VERSION -->
+  <details class="addon-details">
+    <summary class="addon-summary">Full log (click to expand)</summary>
+
+    <div class="addon-content">
+
+      <p class="addon-desc">
+        The “More” section has been fully completed with new text and structure.
+        A zoom box feature was also added to improve visual interaction.
+      </p>
+
+      <p class="addon-desc">
+        The work took approximately 10 hours to finish.
+      </p>
+
+      <p class="addon-desc">
+        Two unused Hardware Visual showcases were removed. These were originally
+        intended for stepper and DC motor demonstrations but were not used.
+        They have been removed.
+      </p>
+
+      <p class="addon-desc">
+        An idea was considered to include an Arduino CLI download with scripts
+        to assist with uploading and usage. However, its placement and usefulness
+        are still unclear.
+      </p>
+
+      <p class="addon-desc">
+        Mobile CSS appears to be broken or missing and requires investigation.
+      </p>
+
+      <p class="addon-desc">
+        The next focus will be completing the “Beginner side” of the project,
+        including Home, dropdown navigation, and Examples with better explanations
+        of Arduino fundamentals.
+      </p>
+
+      <p class="addon-desc">
+        The Community section will be skipped for now. A small update will be made
+        to Code Beta, and more quizzes will be added.
+      </p>
+
+      <p class="addon-desc">
+        Plans include expanding the “More of all” dropdown and deciding on future
+        advanced or experimental features.
+      </p>
+
+      <p class="addon-desc">
+        The Arduino CLI idea may not be suitable for most users, as it targets a more
+        advanced audience.
+      </p>
+
+      <p class="addon-desc">
+        This project is currently being developed solo, including the update system
+        and community structure.
+      </p>
+
+      <p class="addon-desc">
+        Message to future users: if this guide grows and becomes active,
+        hopefully we can meet and interact through the community.
+      </p>
+
+      <p class="addon-desc">
+        Thank you and goodbye.
+      </p>
+
+      <p class="addon-desc">
+        Written on 05/05/2026 at 03:31AM.
+      </p>
+
+    </div>
+
+  </details>
+
+</div>
+
+<div class="addon-card">
+
+  <div class="addon-header">
+    <h2 class="addon-title">Code Beta Update</h2>
+    <span class="addon-version">v1.4</span>
+  </div>
+
+  <!-- SHORT VERSION -->
+  <details class="addon-details">
+    <summary class="addon-summary">Short updates (click to expand)</summary>
+
+    <ul class="addon-features">
+      <li>Code beta CSS fully reworked</li>
+      <li>JavaScript improved and optimized</li>
+
+      <li>Upload feature removed</li>
+      <li>Compile system improved</li>
+      <li>Scrolling fixed globally</li>
+
+      <li>Navigation restored (after local removal)</li>
+
+      <li>Examples expanded and fixed</li>
+      <li>Open function fixed</li>
+      <li>Local save system adjusted (not re-added)</li>
+
+      <li>Tutorial page redesigned</li>
+      <li>Navigation fixed after local break</li>
+      <li>CSS reverted to stable version</li>
+      <li>JS improved</li>
+
+      <li>Feedback update order reversed (latest → oldest)</li>
+      <li>Feedback formatting improved</li>
+
+      <li>29/04/2026 — 19:34</li>
+    </ul>
+  </details>
+
+  <!-- LONG VERSION -->
+  <details class="addon-details">
+    <summary class="addon-summary">Full log (click to expand)</summary>
+
+    <div class="addon-content">
+
+      <p class="addon-desc">
+        Code beta section received a full CSS rework along with improvements to JavaScript logic.
+      </p>
+
+      <p class="addon-desc">
+        The upload feature was removed, while the compile system was improved for better usability.
+        Scrolling behavior across the section has been fixed.
+      </p>
+
+      <p class="addon-desc">
+        Navigation was restored after being accidentlly removed locally.
+      </p>
+
+      <p class="addon-desc">
+        Examples were expanded, re-added, and made functional again.
+      </p>
+
+      <p class="addon-desc">
+        The open function was fixed. The local save system was adjusted but not reintroduced
+        in this update.
+      </p>
+
+      <p class="addon-desc">
+        The tutorial page was redesigned after local issues. Navigation was fixed,
+        CSS was reverted to a stable version, and JavaScript was improved.
+      </p>
+
+      <p class="addon-desc">
+        Feedback section now displays updates in reverse order (latest first instead of oldest first).
+        Formatting and structure were also improved.
+      </p>
+
+      <p class="addon-desc">
+        Update written at 19:34 on 29/04/2026.
+
+      </p>
+
+    </div>
+
+  </details>
+
+</div>
+
+<div class="addon-card">
+
+  <div class="addon-header">
+    <h2 class="addon-title">Feedback Update</h2>
+    <span class="addon-version">v1.3</span>
+  </div>
+
+  <!-- SHORT VERSION -->
+  <details class="addon-details">
+    <summary class="addon-summary">Short updates (click to expand)</summary>
+
+    <ul class="addon-features">
+      <li>Feedback section updated</li>
+      <li>New update cards system added</li>
+      <li>Download system fully reworked</li>
+
+      <li>Timer added (4s per file, was 6s test)</li>
+
+      <li>Download size display (KB/MB) coming soon</li>
+      <li>Planned: total size calculation (1–2 days)</li>
+
+      <li>Image preview system planned (creator view)</li>
+      <li>More fixes coming next</li>
+
+      <li><strong>Next focus:</strong> Tutorials page</li>
+    </ul>
+  </details>
+
+  <!-- LONG VERSION -->
+  <details class="addon-details">
+    <summary class="addon-summary">Full log (click to expand)</summary>
+
+    <div class="addon-content">
+      <p class="addon-desc">
+        Feedback section has been updated and cleaned to better match the overall system.
+      </p>
+
+      <p class="addon-desc">
+        A new update card system was created to improve how updates are displayed and structured.
+      </p>
+
+      <p class="addon-desc">
+        The download system has been fully reworked, including UI and logic improvements.
+      </p>
+
+      <p class="addon-desc">
+        A timer system was added for controlled downloads. Initial testing used 6 seconds per file,
+        now adjusted to 4 seconds per file for better balance.
+      </p>
+
+      <p class="addon-desc">
+        A download size indicator (KB/MB) will be added soon, along with total size calculation
+        within the next 1–2 days.
+      </p>
+
+      <p class="addon-desc">
+        An image preview system is planned for personal/creator view to better visualize content.
+      </p>
+
+      <p class="addon-desc">
+        Additional fixes and improvements will follow after this update.
+      </p>
+
+      <p class="addon-desc">
+        Next major focus will shift toward improving and building out the Tutorials page.
+      </p>
+    </div>
+
+  </details>
+
+</div>
+<div class="addon-card">
+
+  <div class="addon-header">
+    <h2 class="addon-title">Corruption Analysis</h2>
+    <span class="addon-version">v1.2.1</span>
+  </div>
+
+  <!-- SHORT VERSION -->
+  <details class="addon-details">
+    <summary class="addon-summary">What likely happened (click to expand)</summary>
+
+    <ul class="addon-features">
+      <li><strong>Likely cause:</strong> power loss during auto-save</li>
+      <li>Custom Python editor (.exe) was saving multiple files</li>
+      <li>8/11 files corrupted mid-write</li>
+      <li>Remaining files were not being written at that moment</li>
+
+      <li>Files became partially written (incomplete data)</li>
+      <li>HTML/CSS/JS structure broken</li>
+
+      <li>GitHub not the cause</li>
+      <li>Corrupted files were uploaded after incident</li>
+
+      <li>Conclusion: local failure → then synced</li>
+      <li>Prevention steps planned</li>
+    </ul>
+  </details>
+
+  <!-- LONG VERSION -->
+  <details class="addon-details">
+    <summary class="addon-summary">Full explanation (click to expand)</summary>
+
+    <div class="addon-content">
+      <p class="addon-desc">
+        The corruption was most likely caused by a sudden power loss while
+        files were being auto-saved in a custom Python-based editor.
+      </p>
+
+      <p class="addon-desc">
+        During the save process, files are overwritten and rewritten. If the
+        system shuts down mid-write, the file can become partially written,
+        resulting in broken or unreadable content.
+      </p>
+
+      <p class="addon-desc">
+        This explains why only 8 out of 11 files were affected. Not all files
+        were being written at the same time.
+      </p>
+
+      <p class="addon-desc">
+        GitHub was not the source of the issue. The corrupted files were
+        likely uploaded after the incident, causing both local and remote
+        versions to match the damaged state.
+      </p>
+
+      <p class="addon-desc">
+        Future updates will focus on adding backup systems, improving save
+        safety, and preventing data loss during unexpected shutdowns.
+      </p>
+    </div>
+
+  </details>
+
+</div>
+<div class="addon-card">
+
+  <div class="addon-header">
+    <h2 class="addon-title">Recovery Update</h2>
+    <span class="addon-version">v1.2</span>
+  </div>
+
+  <!-- SHORT VERSION -->
+  <details class="addon-details">
+    <summary class="addon-summary">Short summary (click to expand)</summary>
+
+    <ul class="addon-features">
+      <li><strong>Critical issue:</strong> 8/11 files corrupted</li>
+      <li>Local + GitHub affected</li>
+      <li>All files recovered successfully</li>
+      <li>Lost: 1 CSS file (feedback/download)</li>
+
+      <li>Backups system planned</li>
+      <li>Feedback section will be re-cleaned</li>
+      <li>"More" section delayed</li>
+
+      <li>Code + examples preserved</li>
+      <li>Online counter restored</li>
+      <li>Community update after release</li>
+
+      <li>Corruption time: ~10:30 PM</li>
+      <li>Recovery time: ~11:14 PM – 12:40 AM</li>
+      <li>Recovery work: 5:10 PM – 6:04 PM</li>
+
+      <li>Log written: 28/04/2026 18:05</li>
+    </ul>
+  </details>
+
+  <!-- LONG VERSION -->
+  <details class="addon-details">
+    <summary class="addon-summary">Full log (click to expand)</summary>
+
+    <div class="addon-content">
+      <p class="addon-desc">
+        Major issue occurred where 8 out of 11 files became corrupted,
+        both locally and on GitHub.
+      </p>
+
+      <p class="addon-desc">
+        Recovery was successful. Only one CSS file related to feedback/download
+        was lost.
+      </p>
+
+      <p class="addon-desc">
+        Cause is currently unknown.
+      </p>
+
+      <p class="addon-desc">
+        Next update will focus on fixes, backup systems, and cleaning the
+        feedback section.
+      </p>
+
+      <p class="addon-desc">
+        "More" section updates will be delayed.
+      </p>
+
+      <p class="addon-desc">
+        Code and examples were safely preserved.
+      </p>
+
+      <p class="addon-desc">
+        Online counter has been restored.
+      </p>
+
+      <p class="addon-desc">
+        Community updates will happen after release.
+      </p>
+
+      <p class="addon-desc">
+        Estimated corruption time: around 10:30 PM.
+      </p>
+
+      <p class="addon-desc">
+        Initial recovery window: 11:14 PM – 12:40 AM.
+      </p>
+
+      <p class="addon-desc">
+        Total recovery work: 5:10 PM – 6:04 PM.
+      </p>
+
+      <p class="addon-desc">
+        Update written: 28/04/2026 at 18:05.
+      </p>
+    </div>
+
+  </details>
+
+</div>
+<div class="addon-card">
+
+  <div class="addon-header">
+    <h2 class="addon-title">Update Log</h2>
+    <span class="addon-version">v1.1</span>
+  </div>
+
+  <!-- SHORT VERSION -->
+  <details class="addon-details">
+    <summary class="addon-summary">Short updates (click to expand)</summary>
+
+    <ul class="addon-features">
+      <li>Quiz code improved + C added</li>
+      <li>Ranking system needs images</li>
+      <li>Editor compile works (no exe needed)</li>
+      <li>Music idea (planned)</li>
+      <li>Tutorials starting</li>
+      <li>CLI download not planned</li>
+      <li>Community needs major work</li>
+      <li>Some sections untouched (3 months)</li>
+      <li>Hardware Visual needs images + animation</li>
+      <li>General code fixes pending</li>
+      <li>14/04/2026</li>
+      <li>Final note added (15/04/2026)</li>
+    </ul>
+  </details>
+
+  <!-- LONG VERSION -->
+  <details class="addon-details">
+    <summary class="addon-summary">Full log (click to expand)</summary>
+
+    <div class="addon-content">
+      <p class="addon-desc">Finnesed quizz code and added C to quizz Note:</p>
+      <p class="addon-desc">Needs more C and img for rank</p>
+      <p class="addon-desc">Code editor compile works no upload exe app needed</p>
+      <p class="addon-desc">Music?</p>
+      <p class="addon-desc">Will start work on tutorials</p>
+      <p class="addon-desc">Cli download? NO?</p>
+      <p class="addon-desc">Community needs a whole ton of work</p>
+      <p class="addon-desc">More left untouched since 3 months ago?</p>
+      <p class="addon-desc">Finish img and animation for Hardware visual page</p>
+      <p class="addon-desc">Code fix??</p>
+      <p class="addon-desc">14/04/2026</p>
+      <p class="addon-desc">
+        its 1:05 15/04/2026 and im done.(and yes this will be part of the web)
+        ahhhhhhhhhhhhhh done for now...
+      </p>
+    </div>
+
+  </details>
+
+</div>
+
+<div class="addon-card">
+
+  <div class="addon-header">
+    <h2 class="addon-title">Big Update</h2>
+    <span class="addon-version">v1.0</span>
+  </div>
+
+  <!-- SHORT VERSION -->
+  <details class="addon-details">
+    <summary class="addon-summary">Short updates (click to expand)</summary>
+
+    <ul class="addon-features">
+      <li>Home syntax + CSS improved</li>
+      <li>Navigation optimized for mobile & PC</li>
+      <li>Text readability improved</li>
+
+      <li><strong>BIG update:</strong></li>
+      <li>Tutorial page added</li>
+      <li>Community improved</li>
+      <li>Examples more stable</li>
+      <li>Code system updated</li>
+
+      <li>Editor upgraded (compile, upload, code)</li>
+      <li>Syntax highlight issue (temporary)</li>
+
+      <li>Feedback expanded (upload page added)</li>
+      <li>Download system improved + Word support</li>
+      <li>Download size reduced (300MB → under 5MB)</li>
+
+      <li>Examples dropdown + Arduino CLI copy commands</li>
+      <li>More dropdowns prepared for future features</li>
+
+      <li>Hardware Visual remastered (zoom fix)</li>
+
+      <li><strong>Editor update:</strong></li>
+      <li>Compile server running</li>
+      <li>Layout rework + more features coming</li>
+
+      <li>Tutorials in progress</li>
+      <li>Quizzes completed (1 month work)</li>
+
+      <li><strong>End of update</strong></li>
+      <li>More details coming soon</li>
+      <li>13/04/2026</li>
+    </ul>
+  </details>
+
+  <!-- LONG VERSION -->
+  <details class="addon-details">
+    <summary class="addon-summary">Full log (click to expand)</summary>
+
+    <div class="addon-content">
+      <p class="addon-desc">Home got better syntax and CSS fixes.</p>
+      <p class="addon-desc">Navigation and styling improved for mobile and PC.</p>
+      <p class="addon-desc">Text made easier to read and write.</p>
+
+      <p class="addon-desc"><strong>BIG Update:</strong></p>
+      <p class="addon-desc">
+        Tutorial page added. Community improved. Examples page is more stable and less buggy.
+        Code system updated.
+      </p>
+
+      <p class="addon-desc">
+        Code editor upgraded with compile, upload, and code features
+        (syntax highlighting temporarily lost).
+      </p>
+
+      <p class="addon-desc">
+        Feedback section expanded (upload page added). Download system extended and fixed.
+        Word download now supported.
+      </p>
+
+      <p class="addon-desc">
+        Download size reduced from ~300MB to under 5MB average.
+      </p>
+
+      <p class="addon-desc">
+        Examples now include dropdowns and Arduino CLI copy commands.
+      </p>
+
+      <p class="addon-desc">
+        More dropdown systems prepared for future features (zoom issue noted).
+      </p>
+
+      <p class="addon-desc">
+        Hardware Visual page remastered (zoom fix).
+      </p>
+
+      <p class="addon-desc"><strong>Editor update:</strong></p>
+      <p class="addon-desc">
+        Compile server is running. More features coming. Full layout rework done.
+      </p>
+
+      <p class="addon-desc">
+        Tutorials are in progress. Quizzes completed after 1 month of work
+        (more will be added).
+      </p>
+
+      <p class="addon-desc"><strong>End of Big update.</strong></p>
+      <p class="addon-desc">More details coming soon.</p>
+      <p class="addon-desc">13/04/2026</p>
+    </div>
+
+  </details>
+
+</div>
+
+
+
+
+
+
+
+
+
+</section>
+
+<section id="contact" class="page">
+  <h2>Contact</h2>
+
+  <div class="form-panel">
+    <h2>CONTACT FORM</h2>
+    <p>Type your message below and your mail client will open.</p>
+
+    <form onsubmit="sendMail(); return false;">
+      <label>YOUR NAME:</label>
+      <input type="text" id="name" required>
+
+      <label>YOUR EMAIL:</label>
+      <input type="email" id="email" required>
+
+      <label>SUBJECT:</label>
+      <input type="text" id="subject" required>
+
+      <label>MESSAGE:</label>
+      <textarea id="message" rows="5"></textarea>
+
+      <button class="btn-submit">SEND MESSAGE</button>
+    </form>
+  </div>
+
+  <!-- Contact info and buttons below the form -->
+  <div class="contact-info" style="margin-top: 30px; text-align: center;">
+    <p>Email: <a href="mailto:guidecommunity.contacts@gmail.com">guidecommunity.contacts@gmail.com</a></p>
+  </div>
+
+  <div class="quick-links">
+    <a href="https://instagram.com/darkshadow_web_dev" target="_blank">Instagram</a>
+    <a href="https://github.com/darkshadow-dev" target="_blank">GitHub</a>
+<a href="https://forms.gle/YGrm43ZC8cpHdaLh6">Form</a>
+</section>
+
+<section id="feedback" class="page">
+  <h2>Feature Request</h2>
+  <p>Help shape the future of Arduino Guide.</p>
+  <div class="form-panel">
+<label>What should we add?</label>
+<select id="type" onchange="toggleCustomType()">
+  <option value="">Select one</option>
+  <option>New feature</option>
+  <option>Bug fix</option>
+  <option>UI change</option>
+  <option>Performance</option>
+  <option value="custom">Other (type your own)</option>
+</select>
+
+<!-- hidden by default -->
+<input 
+  id="customType" 
+  placeholder="Type your own..." 
+  style="display:none; margin-top:8px;"
+>
+
+    <label>Describe it</label>
+    <textarea id="idea" rows="6"></textarea>
+
+    <label>Your nickname (optional)</label>
+    <input id="user">
+
+    <button class="btn-submit" onclick="submitFeedback()">Submit</button>
+
+    <p id="formStatus"></p>
+
+  </div>
+</section>
+
+<section id="download-pdf" class="page">
+
+  <h2>Download for Offline Use</h2>
+  <p>Select pages and export them as a single PDF.</p>
+
+  <hr>
+
+  <!-- PAGE LIST -->
+  <div id="downloadList">
+
+    <label>
+      <input type="checkbox" checked value="Arduino%20Guide.html">
+      Home  |  Required 1,861 KB (1.8 MB)
+    </label>
+
+    <label>
+      <input type="checkbox" value="Examples.html">
+      Examples  |  Required 45.7 KB (0.04 MB)
+    </label>
+
+    <label>
+      <input type="checkbox" value="Arduino%20Guide%20Extra.html">
+      Extra  |  Required 1737 KB (1.7 MB)
+    </label>
+
+    <label>
+      <input type="checkbox" value="Arduino%20Download.html">
+      More CLI download  |  Required 105 KB (0.1 MB)
+    </label>
+
+    <label>
+      <input type="checkbox" value="Feedback.html">
+      Feedback  | Required 1448 KB (1.4 MB)
+    </label>
+  <p>Total download size 5196.7 KB (4.9 ~= 5.1 MB)
+  </div>
+
+  <hr>
+
+  <!-- EXPORT OPTIONS -->
+  <div class="download-actions">
+    <span id="downloadMsg"></span>
+    <button class="btn-action" onclick="startDownload()" id="dlBtn">
+      Download PDF
+    </button>
+  </div>
+
+</section>
+
+<section id="notfound" class="page">
+    <h2>404 – Page Not Found</h2>
+    <p>The section you tried to open does not exist.</p>
+    <button onclick="goHome()">Go Home</button>
+</section>
+
+</main>
+
+<footer>
+  Arduino Guide Ⓖ  <span id="ieSecret"> 1989</span>
+</footer><script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="js/main.js" defer></script>
+
+<script>
+
+let EXPORT_FILES = [
+    "Arduino%20Guide.html",
+    "Arduino%20Guide%20Extra.html",
+    "Feedback.html",
+    "Arduino%20Download.html",
+    "Examples.html"
+];
+
+
+/* ============================================================
+   DOWNLOAD
+   ============================================================ */
+
+async function startDownload() {
+
+    const checks =
+        document.querySelectorAll(
+            "#downloadList input:checked"
+        );
+
+    const btn =
+        document.getElementById("dlBtn");
+
+    const msg =
+        document.getElementById("downloadMsg");
+
+    if (checks.length === 0) {
+        msg.textContent =
+            "Select at least one page";
+        return;
+    }
+
+    EXPORT_FILES =
+        [...checks].map(c => c.value);
+
+    const totalTime =
+        EXPORT_FILES.length * 4;
+
+    btn.classList.add("loading");
+    btn.disabled = true;
+
+    msg.textContent =
+        `Preparing... 0s / ${totalTime}s`;
+
+    try {
+
+        const timerPromise =
+            createAccurateTimer(
+                totalTime,
+                elapsed => {
+                    msg.textContent =
+                        `Preparing... ${elapsed}s / ${totalTime}s`;
+                }
+            );
+
+        const pdfPromise =
+            downloadOfflinePDF();
+
+        const results =
+            await Promise.all([
+                timerPromise,
+                pdfPromise
+            ]);
+
+        const pdf =
+            results[1];
+
+        msg.textContent =
+            "Downloading...";
+
+        pdf.save(
+            "Arduino-Guide-Offline.pdf"
+        );
+
+        msg.textContent =
+            "Download complete ✔";
+
+    }
+    catch (error) {
+
+        console.error(
+            "PDF ERROR:",
+            error
+        );
+
+        msg.textContent =
+            "PDF export failed";
+
+        alert(
+            "The PDF could not be created.\n\n" +
+            "Check the browser console for details."
+        );
+    }
+
+    btn.classList.remove("loading");
+    btn.disabled = false;
+}
+
+
+/* ============================================================
+   TIMER
+   ============================================================ */
+
+function createAccurateTimer(
+    totalTime,
+    onUpdate
+) {
+
+    const start =
+        Date.now();
+
+    return new Promise(resolve => {
+
+        function tick() {
+
+            const elapsed =
+                Math.floor(
+                    (Date.now() - start) / 1000
+                );
+
+            onUpdate(elapsed);
+
+            if (elapsed >= totalTime) {
+                resolve();
+            }
+            else {
+                requestAnimationFrame(tick);
+            }
+        }
+
+        tick();
+    });
+}
+
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+
+function wait(ms) {
+    return new Promise(
+        resolve => setTimeout(resolve, ms)
+    );
+}
+
+
+async function loadFile(url) {
+
+    const res =
+        await fetch(url);
+
+    if (!res.ok) {
+
+        throw new Error(
+            `Could not load ${url} (${res.status})`
+        );
+    }
+
+    const text =
+        await res.text();
+
+    const doc =
+        new DOMParser()
+            .parseFromString(
+                text,
+                "text/html"
+            );
+
+    return doc.body;
+}
+
+
+async function waitForImages(container) {
+
+    const images =
+        [...container.querySelectorAll("img")];
+
+    await Promise.all(
+        images.map(img => {
+
+            if (img.complete) {
+                return Promise.resolve();
+            }
+
+            return new Promise(resolve => {
+
+                img.onload =
+                    resolve;
+
+                img.onerror =
+                    resolve;
+
+            });
+        })
+    );
+}
+
+
+/* ============================================================
+   EXAMPLE DATABASE
+   ============================================================ */
+
+const PDF_EXAMPLE_GROUPS = [
+
+    {
+        title: "Basic",
+        examples: [
+            "blink",
+            "button",
+            "button-led",
+            "buzzer"
+        ]
+    },
+
+    {
+        title: "Intermediate",
+        examples: [
+            "pwm",
+            "multi-led",
+            "analog",
+            "joystick",
+            "oled"
+        ]
+    },
+
+    {
+        title: "Advanced",
+        examples: [
+            "serial",
+            "timer",
+            "interrupts",
+            "eeprom",
+            "pwm-control"
+        ]
+    },
+
+    {
+        title: "Voltage Monitor",
+        examples: [
+            "battery-monitor",
+            "usb-monitor",
+            "solar-monitor",
+            "power-supply-test",
+            "low-voltage-alert"
+        ]
+    },
+
+    {
+        title: "Test Circuits",
+        examples: [
+            "led-test",
+            "speaker-test",
+            "button-test",
+            "relay-test",
+            "sensor-test"
+        ]
+    }
+
+];
+
+
+/* ============================================================
+   CREATE EXAMPLES CHAPTER
+   ============================================================ */
+
+async function createExamplesChapter() {
+
+    /*
+        Hidden iframe loads the REAL Examples.html.
+
+        This means Examples.js actually executes.
+    */
+
+    const iframe =
+        document.createElement("iframe");
+
+    iframe.style.position =
+        "fixed";
+
+    iframe.style.left =
+        "-100000px";
+
+    iframe.style.top =
+        "0";
+
+    iframe.style.width =
+        "1200px";
+
+    iframe.style.height =
+        "1000px";
+
+    iframe.style.border =
+        "0";
+
+    iframe.style.visibility =
+        "hidden";
+
+    document.body.appendChild(
+        iframe
+    );
+
+    await new Promise(
+        (resolve, reject) => {
+
+            iframe.onload =
+                resolve;
+
+            iframe.onerror =
+                reject;
+
+            iframe.src =
+                "Examples.html";
+        }
+    );
+
+    const win =
+        iframe.contentWindow;
+
+    const doc =
+        iframe.contentDocument;
+
+    if (
+        !win ||
+        !doc
+    ) {
+
+        document.body.removeChild(
+            iframe
+        );
+
+        throw new Error(
+            "Could not access Examples.html"
+        );
+    }
+
+    await wait(500);
+
+
+    /*
+        Main Examples chapter.
+    */
+
+    const chapter =
+        document.createElement("div");
+
+    chapter.className =
+        "pdf-chapter pdf-examples-chapter";
+
+
+    /*
+        Chapter title.
+    */
+
+    chapter.innerHTML = `
+
+        <div class="pdf-chapter-cover">
+
+            <div class="pdf-chapter-label">
+                CHAPTER
+            </div>
+
+            <h1>
+                Arduino Examples
+            </h1>
+
+            <p>
+                Practical Arduino examples,
+                explanations, code and commands.
+            </p>
+
+        </div>
+
+    `;
+
+
+    /*
+        Render every category.
+    */
+
+    for (
+        const group
+        of PDF_EXAMPLE_GROUPS
+    ) {
+
+        /*
+            Category heading.
+        */
+
+        const category =
+            document.createElement(
+                "div"
+            );
+
+        category.className =
+            "pdf-example-category";
+
+
+        category.innerHTML = `
+
+            <div class="pdf-category-title">
+
+                <span>
+                    EXAMPLES
+                </span>
+
+                <h2>
+                    ${group.title}
+                </h2>
+
+            </div>
+
+        `;
+
+        chapter.appendChild(
+            category
+        );
+
+
+        /*
+            Open every example.
+        */
+
+        for (
+            const name
+            of group.examples
+        ) {
+
+            if (
+                typeof win.loadExample !==
+                "function"
+            ) {
+
+                console.error(
+                    "loadExample() not found."
+                );
+
+                continue;
+            }
+
+
+            /*
+                Actually open the example
+                in the real Examples page.
+            */
+
+            win.loadExample(name);
+
+            await wait(120);
+
+
+            const source =
+                doc.getElementById(
+                    "exampleBox"
+                );
+
+            if (!source) {
+                continue;
+            }
+
+
+            /*
+                Create a completely clean
+                PDF example container.
+
+                We DO NOT copy the website's
+                left/right layout.
+            */
+
+            const example =
+                document.createElement(
+                    "article"
+                );
+
+            example.className =
+                "pdf-example";
+
+
+            /*
+                TITLE
+            */
+
+            const title =
+                source.querySelector(
+                    "#exampleTitle"
+                );
+
+            if (title) {
+
+                const h3 =
+                    document.createElement(
+                        "h3"
+                    );
+
+                h3.textContent =
+                    title.textContent.trim();
+
+                example.appendChild(
+                    h3
+                );
+            }
+
+
+            /*
+                SUMMARY / EXPLANATION
+            */
+
+            const text =
+                source.querySelector(
+                    "#exampleText"
+                );
+
+            if (text) {
+
+                const summary =
+                    document.createElement(
+                        "div"
+                    );
+
+                summary.className =
+                    "pdf-example-summary";
+
+                summary.innerHTML = `
+                    <strong>
+                        Summary
+                    </strong>
+                `;
+
+                const p =
+                    document.createElement(
+                        "p"
+                    );
+
+                p.textContent =
+                    text.textContent.trim();
+
+                summary.appendChild(
+                    p
+                );
+
+                example.appendChild(
+                    summary
+                );
+            }
+
+
+            /*
+                CODE
+            */
+
+            const codeBlock =
+                source.querySelector(
+                    ".code-block"
+                );
+
+            if (codeBlock) {
+
+                const codeSection =
+                    document.createElement(
+                        "div"
+                    );
+
+                codeSection.className =
+                    "pdf-example-code";
+
+
+                const codeTitle =
+                    document.createElement(
+                        "strong"
+                    );
+
+                codeTitle.textContent =
+                    "Example Code";
+
+                codeSection.appendChild(
+                    codeTitle
+                );
+
+
+                const pre =
+                    codeBlock.querySelector(
+                        "pre"
+                    );
+
+                if (pre) {
+
+                    const newPre =
+                        document.createElement(
+                            "pre"
+                        );
+
+                    newPre.textContent =
+                        pre.textContent;
+
+                    codeSection.appendChild(
+                        newPre
+                    );
+                }
+
+                example.appendChild(
+                    codeSection
+                );
+            }
+
+
+            /*
+                CLI / COMMANDS
+            */
+
+            const cli =
+                source.querySelector(
+                    ".cli-cmd-container"
+                );
+
+            if (cli) {
+
+                const commands =
+                    document.createElement(
+                        "div"
+                    );
+
+                commands.className =
+                    "pdf-example-commands";
+
+
+                const heading =
+                    document.createElement(
+                        "strong"
+                    );
+
+                heading.textContent =
+                    "CLI Commands";
+
+                commands.appendChild(
+                    heading
+                );
+
+
+                const text =
+                    document.createElement(
+                        "p"
+                    );
+
+                text.textContent =
+                    cli.textContent
+                        .replace(/\s+/g, " ")
+                        .trim();
+
+                commands.appendChild(
+                    text
+                );
+
+                example.appendChild(
+                    commands
+                );
+            }
+
+
+            /*
+                Add the complete example.
+            */
+
+            if (
+                example.children.length
+            ) {
+
+                category.appendChild(
+                    example
+                );
+            }
+        }
+    }
+
+
+    document.body.removeChild(
+        iframe
+    );
+
+    return chapter;
+}
+
+
+/* ============================================================
+   NORMAL GUIDE CHAPTER
+   ============================================================ */
+
+async function createNormalChapter(
+    file
+) {
+
+    const body =
+        await loadFile(file);
+
+    const chapter =
+        document.createElement(
+            "div"
+        );
+
+    chapter.className =
+        "pdf-file-chapter";
+
+
+    const pages =
+        body.querySelectorAll(
+            ".page"
+        );
+
+
+    for (
+        const page
+        of pages
+    ) {
+
+        const section =
+            page.cloneNode(true);
+
+        section.classList.add(
+            "active"
+        );
+
+        section.style.display =
+            "block";
+
+        section.style.visibility =
+            "visible";
+
+        section.style.position =
+            "static";
+
+        section.style.width =
+            "100%";
+
+
+        /*
+            Open details.
+        */
+
+        section
+            .querySelectorAll(
+                "details"
+            )
+            .forEach(details => {
+                details.open = true;
+            });
+
+
+        /*
+            Remove interactive controls.
+        */
+
+        section
+            .querySelectorAll(
+                "button, select, input, textarea"
+            )
+            .forEach(el => {
+
+                if (
+                    !el.classList.contains(
+                        "pdf-keep"
+                    )
+                ) {
+                    el.remove();
+                }
+            });
+
+
+        /*
+            Remove website-only elements.
+        */
+
+        section
+            .querySelectorAll(
+                "#liveCounter, " +
+                "#copyPopup, " +
+                ".live-counter, " +
+                "#rotateWarning"
+            )
+            .forEach(el =>
+                el.remove()
+            );
+
+
+        chapter.appendChild(
+            section
+        );
+    }
+
+
+    return chapter;
+}
+
+
+/* ============================================================
+   PDF
+   ============================================================ */
+
+async function downloadOfflinePDF() {
+
+    const {
+        jsPDF
+    } = window.jspdf;
+
+
+    const pdf =
+        new jsPDF(
+            "p",
+            "mm",
+            "a4"
+        );
+
+
+    /*
+        A4 content area.
+    */
+
+    const pageWidth =
+        190;
+
+    const pageHeight =
+        277;
+
+
+    /*
+        First page is created by jsPDF.
+    */
+
+    let firstPage =
+        true;
+
+
+    /*
+        Temporary HTML container.
+    */
+
+    const container =
+        document.createElement(
+            "div"
+        );
+
+    container.id =
+        "pdfExportContainer";
+
+
+    /*
+        PDF-only CSS.
+    */
+
+    const style =
+        document.createElement(
+            "style"
+        );
+
+    style.textContent = `
+
+        #pdfExportContainer {
+
+            width: 190mm;
+
+            max-width: 190mm;
+
+            margin: 0 auto;
+
+            padding: 0;
+
+            background: #fff;
+
+            color: #111;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            overflow: visible;
+        }
+
+
+        #pdfExportContainer * {
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+
+        /* =========================================
+           NORMAL PAGE
+           ========================================= */
+
+        #pdfExportContainer
+        .pdf-file-chapter {
+
+            width: 100%;
+
+            display: block;
+        }
+
+
+        #pdfExportContainer
+        .pdf-file-chapter
+        > .page {
+
+            width: 100%;
+
+            max-width: 100%;
+
+            display: block;
+
+            overflow: visible;
+        }
+
+
+        /* =========================================
+           CHAPTER
+           ========================================= */
+
+        #pdfExportContainer
+        .pdf-chapter-cover {
+
+            width: 100%;
+
+            min-height: 100mm;
+
+            padding-top: 35mm;
+
+            border-bottom:
+                2px solid #222;
+
+            margin-bottom: 15mm;
+
+            break-after: page;
+
+            page-break-after: always;
+        }
+
+
+        .pdf-chapter-label {
+
+            font-size: 11px;
+
+            letter-spacing: 2px;
+
+            font-weight: bold;
+
+            margin-bottom: 6mm;
+        }
+
+
+        .pdf-chapter-cover h1 {
+
+            font-size: 28px;
+
+            margin: 0 0 6mm 0;
+        }
+
+
+        .pdf-chapter-cover p {
+
+            font-size: 13px;
+
+            margin: 0;
+        }
+
+
+        /* =========================================
+           EXAMPLE CATEGORY
+           ========================================= */
+
+        .pdf-example-category {
+
+            width: 100%;
+
+            display: block;
+
+            margin-bottom: 12mm;
+        }
+
+
+        .pdf-category-title {
+
+            width: 100%;
+
+            margin-bottom: 7mm;
+
+            padding-bottom: 3mm;
+
+            border-bottom:
+                1px solid #aaa;
+
+            break-after: avoid;
+
+            page-break-after: avoid;
+        }
+
+
+        .pdf-category-title span {
+
+            display: block;
+
+            font-size: 9px;
+
+            letter-spacing: 1.5px;
+
+            color: #666;
+
+            margin-bottom: 2mm;
+        }
+
+
+        .pdf-category-title h2 {
+
+            margin: 0;
+
+            font-size: 21px;
+        }
+
+
+        /* =========================================
+           COMPLETE EXAMPLE
+           ========================================= */
+
+        .pdf-example {
+
+            width: 100%;
+
+            max-width: 100%;
+
+            margin-bottom: 12mm;
+
+            padding: 6mm;
+
+            border:
+                1px solid #ccc;
+
+            background: #fff;
+
+            overflow: visible;
+
+            break-inside: avoid;
+
+            page-break-inside: avoid;
+        }
+
+
+        .pdf-example h3 {
+
+            margin:
+                0 0 5mm 0;
+
+            font-size: 17px;
+
+            break-after: avoid;
+
+            page-break-after: avoid;
+        }
+
+
+        /* =========================================
+           SUMMARY
+           ========================================= */
+
+        .pdf-example-summary {
+
+            width: 100%;
+
+            margin-bottom: 5mm;
+
+            break-inside: avoid;
+
+            page-break-inside: avoid;
+        }
+
+
+        .pdf-example-summary strong {
+
+            display: block;
+
+            margin-bottom: 2mm;
+
+            font-size: 11px;
+        }
+
+
+        .pdf-example-summary p {
+
+            margin: 0;
+
+            font-size: 11px;
+
+            line-height: 1.5;
+
+            overflow-wrap: break-word;
+        }
+
+
+        /* =========================================
+           CODE
+           ========================================= */
+
+        .pdf-example-code {
+
+            width: 100%;
+
+            max-width: 100%;
+
+            margin-bottom: 5mm;
+
+            padding: 5mm;
+
+            background: #f3f3f3;
+
+            border:
+                1px solid #ccc;
+
+            break-inside: avoid;
+
+            page-break-inside: avoid;
+
+            overflow: hidden;
+        }
+
+
+        .pdf-example-code strong {
+
+            display: block;
+
+            margin-bottom: 3mm;
+
+            font-size: 10px;
+        }
+
+
+        .pdf-example-code pre {
+
+            width: 100%;
+
+            max-width: 100%;
+
+            margin: 0;
+
+            font-family:
+                Consolas,
+                "Courier New",
+                monospace;
+
+            font-size: 8.5px;
+
+            line-height: 1.45;
+
+            white-space:
+                pre-wrap !important;
+
+            overflow-wrap:
+                anywhere;
+
+            word-break:
+                break-word;
+
+            break-inside: avoid;
+
+            page-break-inside: avoid;
+        }
+
+
+        /* =========================================
+           CLI
+           ========================================= */
+
+        .pdf-example-commands {
+
+            width: 100%;
+
+            padding: 4mm;
+
+            background: #fafafa;
+
+            border-left:
+                3px solid #777;
+
+            break-inside: avoid;
+
+            page-break-inside: avoid;
+        }
+
+
+        .pdf-example-commands strong {
+
+            display: block;
+
+            margin-bottom: 2mm;
+
+            font-size: 10px;
+        }
+
+
+        .pdf-example-commands p {
+
+            margin: 0;
+
+            font-size: 9px;
+
+            line-height: 1.4;
+
+            overflow-wrap:
+                anywhere;
+
+            word-break:
+                break-word;
+        }
+
+
+        /* =========================================
+           IMAGES
+           ========================================= */
+
+        #pdfExportContainer img {
+
+            max-width: 100% !important;
+
+            width: auto;
+
+            height: auto;
+
+            display: block;
+
+            margin-left: auto;
+
+            margin-right: auto;
+
+            break-inside: avoid;
+
+            page-break-inside: avoid;
+        }
+
+
+        /* =========================================
+           TEXT
+           ========================================= */
+
+        #pdfExportContainer p {
+
+            overflow-wrap:
+                break-word;
+
+            word-wrap:
+                break-word;
+        }
+
+
+        #pdfExportContainer
+        h1,
+        #pdfExportContainer
+        h2,
+        #pdfExportContainer
+        h3,
+        #pdfExportContainer
+        h4 {
+
+            break-after: avoid;
+
+            page-break-after: avoid;
+        }
+
+
+        /*
+            Keep logical content together.
+        */
+
+        #pdfExportContainer
+        figure,
+        #pdfExportContainer
+        table,
+        #pdfExportContainer
+        pre,
+        #pdfExportContainer
+        .code-block {
+
+            break-inside: avoid;
+
+            page-break-inside: avoid;
+        }
+
+    `;
+
+    container.appendChild(
+        style
+    );
+
+    document.body.appendChild(
+        container
+    );
+
+
+    /* ========================================================
+       BUILD CHAPTERS
+       ======================================================== */
+
+    for (
+        const file
+        of EXPORT_FILES
+    ) {
+
+        /*
+            Examples gets its own
+            special renderer.
+        */
+
+        if (
+            decodeURIComponent(file) ===
+            "Examples.html"
+        ) {
+
+            const examples =
+                await createExamplesChapter();
+
+            container.appendChild(
+                examples
+            );
+
+            continue;
+        }
+
+
+        /*
+            Normal guide page.
+        */
+
+        const chapter =
+            await createNormalChapter(
+                file
+            );
+
+        container.appendChild(
+            chapter
+        );
+    }
+
+
+    /*
+        Wait for all images.
+    */
+
+    await waitForImages(
+        container
+    );
+
+    await wait(500);
+
+
+    /* ========================================================
+       RENDER HTML TO PDF
+       ======================================================== */
+
+    const canvas =
+        await html2canvas(
+            container,
+            {
+                scale: 1.5,
+
+                useCORS: true,
+
+                allowTaint: false,
+
+                backgroundColor:
+                    "#ffffff",
+
+                windowWidth:
+                    1200,
+
+                logging: false
+            }
+        );
+
+
+    const imgData =
+        canvas.toDataURL(
+            "image/jpeg",
+            0.92
+        );
+
+
+    /*
+        Calculate image dimensions.
+    */
+
+    const imgWidth =
+        pageWidth;
+
+    const imgHeight =
+        canvas.height *
+        imgWidth /
+        canvas.width;
+
+
+    /*
+        IMPORTANT:
+
+        The image is still rendered as one
+        continuous document, but we now insert
+        explicit chapter/page boundaries in
+        the HTML.
+
+        This also keeps the Examples chapter
+        separate from the website layout.
+    */
+
+    let heightLeft =
+        imgHeight;
+
+    let position = 0;
+
+
+    /*
+        First page.
+    */
+
+    pdf.addImage(
+        imgData,
+        "JPEG",
+        10,
+        10,
+        imgWidth,
+        imgHeight
+    );
+
+    heightLeft -=
+        pageHeight;
+
+
+    /*
+        Remaining pages.
+    */
+
+    while (
+        heightLeft > 0
+    ) {
+
+        position -=
+            pageHeight;
+
+        pdf.addPage();
+
+        pdf.addImage(
+            imgData,
+            "JPEG",
+            10,
+            position + 10,
+            imgWidth,
+            imgHeight
+        );
+
+        heightLeft -=
+            pageHeight;
+    }
+
+
+    /*
+        Remove temporary HTML.
+    */
+
+    document.body.removeChild(
+        container
+    );
+
+
+    return pdf;
+}
+
+
+/* ============================================================
+   SECRET
+   ============================================================ */
+
+const ie =
+    document.getElementById(
+        "ieSecret"
+    );
+
+if (ie) {
+
+    ie.style.cursor =
+        "pointer";
+
+    ie.onclick = () => {
+
+        if (
+            localStorage.getItem(
+                "secret_ip"
+            )
+        ) {
+            return;
+        }
+
+        localStorage.setItem(
+            "secret_ip",
+            "1"
+        );
+
+        alert(
+`🕵️ Secret Found!
+🖥 Internet Explorer
+
+Developer Secret #?
+
+Internet Explorer was first
+released in 1995, not 1989.
+
+Why 1989?
+
+Because that's the year the
+World Wide Web was proposed.
+
+You discovered this hidden fact.
+
+You found one of the hidden developer secrets.
+Secrets Found: unknown`
+        );
+    };
+}
+
+</script>
+<script src="js/components.js"></script>
+<script type="module" src="js/Live.js"></script>
+<div class="live-counter" id="liveCounter">
+  <span class="dot"></span>
+  Online: <span id="onlineCount">0</span>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

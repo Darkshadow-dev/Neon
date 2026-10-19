@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="Images/Website-Guide.png">
+
+<title>Arduino Guide</title>
+
+<link rel="stylesheet" href="css/main.css">
+<style>
+
+.hardwarevi-pagination {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+    margin-top: 25px;
+}
+
+.page-arrow {
+    padding: 10px 16px;
+    border: 1px solid #ccc;
+    background: #fff;
+    color: #333;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.page-arrow:hover:not(:disabled) {
+    border-color: #16834a;
+    color: #16834a;
+}
+
+.page-arrow:disabled {
+    opacity: .4;
+    cursor: default;
+}
+
+.page-dots {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.page-dot {
+    width: 9px;
+    height: 9px;
+    padding: 0;
+    border: 1px solid #999;
+    border-radius: 50%;
+    background: #fff;
+    cursor: pointer;
+}
+
+.page-dot:hover {
+    border-color: #16834a;
+}
+
+.page-dot.active {
+    background: #16834a;
+    border-color: #16834a;
+}
+
+@media (max-width: 600px) {
+    .tutorial-pagination {
+        gap: 12px;
+    }
+
+    .page-arrow {
+        padding: 9px 12px;
+        font-size: 12px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div id="header"></div>
+<div id="rotateWarning">
+  <div class="rotate-box">
+    <h2>🔄 Rotate Device</h2>
+    <p>Only use in landscape mode!</p>
+  </div>
+</div>
+<main>
+
+<section id="home" class="page active">
+
+  <h1>Hardware Visual Examples</h1>
+  <p>
+    Explore a visual collection of Arduino hardware examples designed to help you
+    understand components, connections, and their real-world usage.</p>
+  <p>
+    Each example provides a clearer view of how different parts work together, making it easier
+    to learn, build, and experiment with your own Arduino projects.
+  </p>
+
+    <div class="hardwarevi-more">
+        <!-- ===================================================== -->
+        <!-- LEFT LIBRARY COLUMN -->
+        <!-- ===================================================== -->
+
+        <div class="hardwarevi-more-left">
+
+            <div class="hardwarevi-more-section">
+
+                <h3>Wiring PWM LED</h3>
+                <span class="example-level intermediate-level">Intermediate</span>
+
+                <p>
+                    Click on the
+                    <a class="next-link nl-green nl-noneunderline nl-md"
+                       href="Examples.html?example=pwm#examples">
+                        PWM LED
+                    </a>
+                    example.
+                </p>
+
+                <details class="wiring-card">
+
+                    <summary>Wiring PWM LED</summary>
+
+                    <div class="wire-gallery" data-wire-gallery>
+
+                        <button class="gallery-btn gallery-prev">
+                            ‹
+                        </button>
+
+                        <div class="wire-box">
+
+                            <div class="wire-slide active">
+
+                                <div class="wire-anim" data-wire-anim>
+
+                                    <img class="wire-frame active"
+                                         src="Wiring Images/Animated/Arduino-PWM-off.png">
+
+                                    <img class="wire-frame"
+                                         src="Wiring Images/Animated/Arduino-PWM-on.png">
+
+                                </div>
+
+                            </div>
+
+                            <div class="wire-slide">
+
+                                <div class="wire-anim" data-wire-anim>
+
+                                    <img class="wire-frame active"
+                                         src="Wiring Images/Animated/Arduino-PWM-off,board.png">
+
+                                    <img class="wire-frame"
+                                         src="Wiring Images/Animated/Arduino-PWM-on,board.png">
+
+                                </div>
+
+                            </div>
+
+                            <div class="wire-slide">
+
+                                <img class="wire-img"
+                                     src="Wiring Images/Circuit/Arduino-PWM-circuit.png">
+
+                            </div>
+
+                        </div>
+
+                        <button class="gallery-btn gallery-next">
+                            ›
+                        </button>
+
+                    </div>
+
+                </details>
+
+                <details>
+
+                    <summary>Wiring Explained</summary>
+
+                    <p>
+                        Connect pin 9 to one end of the resistor.
+                    </p>
+
+                    <p>
+                        Connect the other end of the resistor
+                        to the positive leg of the LED.
+                    </p>
+
+                    <p>
+                        Connect the shorter LED leg to Arduino GND.
+                    </p>
+
+                </details>
+
+            </div>
+
+            <div class="hardwarevi-more-section">
+
+                <h3>Analog Read</h3>
+                <span class="example-level intermediate-level">Intermediate</span>
+
+                <p>
+                    Click on the
+                    <a class="next-link nl-green nl-noneunderline nl-md"
+                       href="Examples.html?example=analog#examples">
+                        Analog Read
+                    </a>
+                    example.
+                </p>
+
+                <details class="wiring-card">
+
+                    <summary>Arduino + Analog Sensor</summary>
+
+                    <div class="wire-gallery" data-wire-gallery>
+
+                        <button class="gallery-btn gallery-prev">
+                            ‹
+                        </button>
+
+                        <div class="wire-box">
+
+                            <div class="wire-slide active">
+
+                                <div class="wire-anim" data-wire-anim>
+
+                                    <img class="wire-frame active"
+                                         src="Wiring Images/Animated/Arduino-Analog-Read-off.png">
+
+                                    <img class="wire-frame"
+                                         src="Wiring Images/Animated/Arduino-Analog-Read-on.png">
+
+                                </div>
+
+                            </div>
+
+                            <div class="wire-slide">
+
+                                <div class="wire-anim" data-wire-anim>
+
+                                    <img class="wire-frame active"
+                                         src="Wiring Images/Animated/Arduino-Analog-Board-Read-off.png">
+
+                                    <img class="wire-frame"
+                                         src="Wiring Images/Animated/Arduino-Analog-Board-Read-on.png">
+
+                                </div>
+
+                            </div>
+
+                            <div class="wire-slide">
+
+                                <img class="wire-img"
+                                     src="Wiring Images/Circuit/Arduino-Analog-circuit.png">
+
+                            </div>
+
+                        </div>
+
+                        <button class="gallery-btn gallery-next">
+                            ›
+                        </button>
+
+                    </div>
+
+                </details>
+
+                <details>
+
+                    <summary>Wiring Explained</summary>
+
+                    <p>
+                        Connect the sensor output to an analog input,
+                        such as A0.
+                    </p>
+
+                    <p>
+                        Connect the sensor power and ground correctly.
+                    </p>
+
+                </details>
+
+            </div>
+
+            <div class="hardwarevi-more-section">
+                <h3>Multiple LEDs</h3><span class="example-level intermediate-level">Intermediate</span>
+                <p>Control three LEDs independently from pins 11, 12 and 13.</p>
+                <p>Open the <a class="next-link nl-green nl-noneunderline nl-md" href="Examples.html?example=multi-led#examples">Multiple LEDs</a> example.</p>
+                <details class="wiring-card"><summary>Arduino + Three LEDs</summary><div class="wire-gallery" data-wire-gallery><button class="gallery-btn gallery-prev" aria-label="Previous wiring image">‹</button><div class="wire-box"><div class="wire-slide active"><img class="wire-img" src="Wiring Images/Circuit/Arduino-LED's-circuit.png" alt="Arduino Uno wired to three LEDs through individual resistors"></div></div><button class="gallery-btn gallery-next" aria-label="Next wiring image">›</button></div></details>
+                <details><summary>Wiring Explained</summary><p>Connect each LED through its own current-limiting resistor to pins 11, 12 and 13. Connect the other LED legs to GND.</p></details>
+            </div>
+
+            <div class="hardwarevi-more-section">
+                <h3>OLED Display</h3><span class="example-level intermediate-level">Intermediate</span>
+                <p>A 128 × 64 SSD1306 display uses the Uno's I²C bus.</p>
+                <p>Open the <a class="next-link nl-green nl-noneunderline nl-md" href="Examples.html?example=oled#examples">OLED Display</a> example.</p>
+                <details class="wiring-card"><summary>Arduino + I²C OLED</summary><div class="wire-gallery" data-wire-gallery><button class="gallery-btn gallery-prev" aria-label="Previous wiring image">‹</button><div class="wire-box"><div class="wire-slide active"><img class="wire-img" src="Wiring Images/Circuit/Arduino-OLED-circuit.png" alt="Four-wire I²C OLED connected to Arduino Uno"></div></div><button class="gallery-btn gallery-next" aria-label="Next wiring image">›</button></div></details>
+                <details><summary>Wiring Explained</summary><p>Connect VCC to 5V, GND to GND, SDA to A4 and SCL to A5 on the Uno.</p></details>
+            </div>
+
+        </div>
+
+
+        <!-- ===================================================== -->
+        <!-- RIGHT LIBRARY COLUMN -->
+        <!-- ===================================================== -->
+
+        <div class="hardwarevi-more-right">
+
+            <div class="hardwarevi-more-section">
+
+                <h3>Wiring LED and Button</h3>
+                <span class="example-level">Basic</span>
+
+                <p>
+                    Click on the
+                    <a class="next-link nl-green nl-noneunderline nl-md"
+                       href="Examples.html?example=button-led#examples">
+                        Button LED
+                    </a>
+                    example.
+                </p>
+
+                <details class="wiring-card">
+
+                    <summary>Wiring LED + Button</summary>
+
+                    <div class="wire-gallery" data-wire-gallery>
+
+                        <button class="gallery-btn gallery-prev">
+                            ‹
+                        </button>
+
+                        <div class="wire-box">
+
+                            <div class="wire-slide active">
+
+                                <div class="wire-anim" data-wire-anim>
+
+                                    <img class="wire-frame active"
+                                         src="Wiring Images/Animated/Arduino-BTN-LED-off.png">
+
+                                    <img class="wire-frame"
+                                         src="Wiring Images/Animated/Arduino-BTN-LED-on.png">
+
+                                </div>
+
+                            </div>
+
+                            <div class="wire-slide">
+
+                                <div class="wire-anim" data-wire-anim>
+
+                                    <img class="wire-frame active"
+                                         src="Wiring Images/Animated/Arduino-BTN-LED-off,board.png">
+
+                                    <img class="wire-frame"
+                                         src="Wiring Images/Animated/Arduino-BTN-LED-on,board.png">
+
+                                </div>
+
+                            </div>
+
+                            <div class="wire-slide">
+
+                                <img class="wire-img"
+                                     src="Wiring Images/Circuit/Arduino-BTN-LED-circuit.png">
+
+                            </div>
+
+                        </div>
+
+                        <button class="gallery-btn gallery-next">
+                            ›
+                        </button>
+
+                    </div>
+
+                </details>
+
+                <details>
+
+                    <summary>Wiring Explained</summary>
+
+                    <p>
+                        Connect the button and LED according to the
+                        circuit shown above.
+                    </p>
+
+                    <p>
+                        The button controls whether the LED is turned on.
+                    </p>
+
+                </details>
+
+            </div>
+
+            <div class="hardwarevi-more-section">
+
+                <h3>Wiring a Joystick</h3>
+                <span class="example-level intermediate-level">Intermediate</span>
+
+                <p>
+                    Use the joystick to read X, Y and button input.
+                </p>
+
+                <details class="wiring-card">
+
+                    <summary>Wiring Joystick</summary>
+
+                    <div class="wire-gallery" data-wire-gallery>
+
+                        <button class="gallery-btn gallery-prev">
+                            ‹
+                        </button>
+
+                        <div class="wire-box">
+
+                            <div class="wire-slide active">
+
+                                <img class="wire-img"
+                                     src="Wiring Images/Circuit/Arduino-Joystick-circuit.svg"
+
+                            </div>
+
+                        </div>
+
+                        <button class="gallery-btn gallery-next">
+                            ›
+                        </button>
+
+                    </div>
+
+                </details>
+
+                <details>
+
+                    <summary>Wiring Explained</summary>
+
+                    <p>
+                        Connect VCC to 5V and GND to GND.
+                    </p>
+
+                    <p>
+                        Connect the X and Y outputs to analog pins.
+                    </p>
+
+                    <p>
+                        Connect the joystick button output to a digital pin.
+                    </p>
+
+                </details>
+
+            </div>
+
+            <div class="hardwarevi-more-section">
+                <h3>Serial Monitor</h3><span class="example-level advanced-level">Advanced</span>
+                <p>Send sketch output to the computer over USB.</p><p>Open the <a class="next-link nl-green nl-noneunderline nl-md" href="Examples.html?example=serial#examples">Serial Monitor</a> example.</p>
+                <details class="wiring-card"><summary>Arduino ↔ Computer</summary><div class="wire-gallery" data-wire-gallery><button class="gallery-btn gallery-prev" aria-label="Previous wiring image">‹</button><div class="wire-box"><div class="wire-slide active"><img class="wire-img" src="Wiring Images/Circuit/Arduino-Serial-monitor.svg" alt="Arduino Uno connected by USB to a computer Serial Monitor"></div></div><button class="gallery-btn gallery-next" aria-label="Next wiring image">›</button></div></details>
+                <details><summary>Setup Explained</summary><p>Upload the sketch, open Serial Monitor and select 9600 baud to match Serial.begin(9600).</p></details>
+            </div>
+
+            <div class="hardwarevi-more-section">
+                <h3>Timers with millis()</h3><span class="example-level advanced-level">Advanced</span>
+                <p>Toggle the built-in LED on a timed interval without pausing the loop.</p><p>Open the <a class="next-link nl-green nl-noneunderline nl-md" href="Examples.html?example=timer#examples">Timers</a> example.</p>
+                <details class="wiring-card"><summary>Built-in LED Timing</summary><div class="wire-gallery" data-wire-gallery><button class="gallery-btn gallery-prev" aria-label="Previous wiring image">‹</button><div class="wire-box"><div class="wire-slide active"><img class="wire-img" src="Wiring Images/Circuit/Arduino-Timer-millis.svg" alt="Arduino Uno millis timer controlling its built-in pin 13 LED"></div></div><button class="gallery-btn gallery-next" aria-label="Next wiring image">›</button></div></details>
+                <details><summary>Timing Explained</summary><p>No external parts are needed. millis() tracks elapsed time while the program continues running other loop tasks.</p></details>
+            </div>
+
+            <div class="hardwarevi-more-section">
+                <h3>External Interrupts</h3><span class="example-level advanced-level">Advanced</span>
+                <p>A button on digital pin 2 triggers an interrupt and toggles the built-in LED.</p><p>Open the <a class="next-link nl-green nl-noneunderline nl-md" href="Examples.html?example=interrupts#examples">Interrupts</a> example.</p>
+                <details class="wiring-card"><summary>Button on D2 + INPUT_PULLUP</summary><div class="wire-gallery" data-wire-gallery><button class="gallery-btn gallery-prev" aria-label="Previous wiring image">‹</button><div class="wire-box"><div class="wire-slide active"><img class="wire-img" src="Wiring Images/Circuit/Arduino-Interrupt-button.svg" alt="Momentary button between digital pin 2 and ground for an Arduino interrupt"></div></div><button class="gallery-btn gallery-next" aria-label="Next wiring image">›</button></div></details>
+                <details><summary>Wiring Explained</summary><p>Wire one side of a momentary button to D2 and the other to GND. INPUT_PULLUP needs no external pull-up resistor; pressing makes a FALLING edge.</p></details>
+            </div>
+
+            <div class="hardwarevi-more-section">
+                <h3>EEPROM Save</h3><span class="example-level advanced-level">Advanced</span>
+                <p>Save a value in the Uno's built-in non-volatile memory and read it back.</p><p>Open the <a class="next-link nl-green nl-noneunderline nl-md" href="Examples.html?example=eeprom#examples">EEPROM Save</a> example.</p>
+                <details class="wiring-card"><summary>Internal Memory + Serial Output</summary><div class="wire-gallery" data-wire-gallery><button class="gallery-btn gallery-prev" aria-label="Previous wiring image">‹</button><div class="wire-box"><div class="wire-slide active"><img class="wire-img" src="Wiring Images/Circuit/Arduino-EEPROM-save.svg" alt="Arduino internal EEPROM write and read flow with result sent over USB Serial"></div></div><button class="gallery-btn gallery-next" aria-label="Next wiring image">›</button></div></details>
+                <details><summary>Memory Explained</summary><p>EEPROM is inside the Uno, so no external memory wiring is needed. The sketch writes address 0, reads it back and prints the value over USB Serial.</p></details>
+            </div>
+
+            <div class="hardwarevi-more-section">
+                <h3>PWM Control</h3><span class="example-level advanced-level">Advanced</span>
+                <p>Fade an external LED by changing the PWM duty cycle on pin 9.</p><p>Open the <a class="next-link nl-green nl-noneunderline nl-md" href="Examples.html?example=pwm-control#examples">PWM Control</a> example.</p>
+                <details class="wiring-card"><summary>Arduino + PWM LED</summary><div class="wire-gallery" data-wire-gallery><button class="gallery-btn gallery-prev" aria-label="Previous wiring image">‹</button><div class="wire-box"><div class="wire-slide active"><img class="wire-img" src="Wiring Images/Circuit/Arduino-PWM-control.svg" alt="Arduino pin 9 connected through a current-limiting resistor to an LED and ground"></div></div><button class="gallery-btn gallery-next" aria-label="Next wiring image">›</button></div></details>
+                <details><summary>Wiring Explained</summary><p>Connect D9 through a 220–330 Ω resistor to the LED anode; connect the LED cathode to GND.</p></details>
+            </div>
+
+        </div>
+
+    </div>
+
+<div class="hardwarevi-pagination"></div>
+</section>
+
+
+<!-- ===================================================== ZOOM OVERLAY ===================================================== -->
+
+<div id="wireOverlay" class="wire-overlay">
+
+    <button id="zoomPrev"
+            class="zoom-gallery-btn zoom-prev">
+        ‹
+    </button>
+
+    <img id="wireZoomImg">
+
+    <div id="wireZoomAnim"
+         class="wire-zoom-anim">
+
+        <img class="wire-zoom-frame active">
+
+        <img class="wire-zoom-frame">
+
+    </div>
+
+    <button id="zoomNext"
+            class="zoom-gallery-btn zoom-next">
+        ›
+    </button>
+
+</div>
+
+<section id="notfound" class="page">
+    <h2>404 – Page Not Found</h2>
+    <p>The section you tried to open does not exist.</p>
+    <button onclick="goHome()">Go Home</button>
+</section>
+
+</main>
+
+<div id="footer"></div>
+
+<script src="js/main.js"></script>
+<script>
+let currentHardwareVisualPage = 1;
+
+const HARDWARE_VISUAL_PER_COLUMN = 3;
+
+function getHardwareVisualColumns() {
+    return {
+        left: Array.from(
+            document.querySelectorAll(
+                ".hardwarevi-more-left .hardwarevi-more-section"
+            )
+        ),
+        right: Array.from(
+            document.querySelectorAll(
+                ".hardwarevi-more-right .hardwarevi-more-section"
+            )
+        )
+    };
+}
+
+function renderHardwareVisualPage() {
+    const columns = getHardwareVisualColumns();
+
+    const leftPages = Math.ceil(
+        columns.left.length / HARDWARE_VISUAL_PER_COLUMN
+    );
+
+    const rightPages = Math.ceil(
+        columns.right.length / HARDWARE_VISUAL_PER_COLUMN
+    );
+
+    const totalPages = Math.max(
+        leftPages,
+        rightPages,
+        1
+    );
+
+    if (currentHardwareVisualPage > totalPages) {
+        currentHardwareVisualPage = totalPages;
+    }
+
+    const start = (currentHardwareVisualPage - 1) * HARDWARE_VISUAL_PER_COLUMN;
+    const end = start + HARDWARE_VISUAL_PER_COLUMN;
+
+    columns.left.forEach(function(card, index) {
+        card.style.display =
+            index >= start && index < end
+                ? ""
+                : "none";
+    });
+
+    columns.right.forEach(function(card, index) {
+        card.style.display =
+            index >= start && index < end
+                ? ""
+                : "none";
+    });
+
+    updateHardwareVisualPagination(totalPages);
+}
+
+function changeHardwareVisualPage(page) {
+    const columns = getHardwareVisualColumns();
+
+    const leftPages = Math.ceil(
+        columns.left.length / HARDWARE_VISUAL_PER_COLUMN
+    );
+
+    const rightPages = Math.ceil(
+        columns.right.length / HARDWARE_VISUAL_PER_COLUMN
+    );
+
+    const totalPages = Math.max(
+        leftPages,
+        rightPages,
+        1
+    );
+
+    if (page < 1 || page > totalPages) {
+        return;
+    }
+
+    currentHardwareVisualPage = page;
+    renderHardwareVisualPage();
+
+    const library = document.querySelector(".hardwarevi-more");
+
+    if (library) {
+        library.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    }
+}
+
+function updateHardwareVisualPagination(totalPages) {
+    const pagination = document.querySelector(
+        ".hardwarevi-pagination"
+    );
+
+    if (!pagination) {
+        return;
+    }
+
+    pagination.innerHTML = "";
+
+    if (totalPages <= 1) {
+        pagination.style.display = "none";
+        return;
+    }
+
+    pagination.style.display = "flex";
+
+    const previous = document.createElement("button");
+    previous.className = "page-arrow";
+    previous.textContent = "← Previous";
+    previous.disabled = currentHardwareVisualPage === 1;
+
+    previous.onclick = function() {
+        changeHardwareVisualPage(
+            currentHardwareVisualPage - 1
+        );
+    };
+
+    pagination.appendChild(previous);
+
+    const dots = document.createElement("div");
+    dots.className = "page-dots";
+
+    for (let i = 1; i <= totalPages; i++) {
+        const dot = document.createElement("button");
+
+        dot.className = "page-dot";
+
+        if (i === currentHardwareVisualPage) {
+            dot.classList.add("active");
+        }
+
+        dot.setAttribute(
+            "aria-label",
+            "Page " + i
+        );
+
+        dot.onclick = function() {
+            changeHardwareVisualPage(i);
+        };
+
+        dots.appendChild(dot);
+    }
+
+    pagination.appendChild(dots);
+
+    const next = document.createElement("button");
+    next.className = "page-arrow";
+    next.textContent = "Next →";
+    next.disabled = currentHardwareVisualPage === totalPages;
+
+    next.onclick = function() {
+        changeHardwareVisualPage(
+            currentHardwareVisualPage + 1
+        );
+    };
+
+    pagination.appendChild(next);
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    renderHardwareVisualPage();
+});
+</script>
+<script type="module" src="js/Live.js"></script>
+<div class="live-counter" id="liveCounter">
+  <span class="dot"></span>
+  Online: <span id="onlineCount">0</span>
+</div>
+<script src="js/components.js"></script>
+<div id="zoomOverlay" class="zoom-overlay">
+  <img id="zoomImg">
+</div>
+</body>
+</html>
+
+

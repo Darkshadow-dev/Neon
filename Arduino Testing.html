@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="Images/Website-Guide.png">
+
+<title>Arduino Guide</title>
+
+<link rel="stylesheet" href="css/main.css">
+
+</head>
+<body>
+
+<div id="header"></div>
+
+
+<main>
+
+<section id="home" class="page active">
+<a href="#test1">test1</a>
+
+
+</section>
+
+<section id="notfound" class="page">
+    <h2>404 – Page Not Found</h2>
+    <p>The section you tried to open does not exist.</p>
+    <button onclick="goHome()">Go Home</button>
+</section>
+
+<section id="test1">
+
+<style>
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+.tutorial-progress{
+  max-width:700px;
+  margin:20px auto 35px;
+  text-align:center;
+}
+
+.tutorial-progress-label{
+  display:flex;
+  justify-content:space-between;
+  font-size:.85rem;
+  margin-bottom:7px;
+}
+
+.tutorial-progress-bar{
+  height:7px;
+  border-radius:99px;
+  background:rgba(0,0,0,.08);
+  overflow:hidden;
+}
+
+.tutorial-progress-bar span{
+  display:block;
+  height:100%;
+  width:10%;
+  background:var(--accent);
+  border-radius:99px;
+}
+
+
+</style>
+
+<div id="rotateWarning">
+  <div class="rotate-box">
+    <h2>🔄 Rotate Device</h2>
+    <p>Only use in landscape mode!</p>
+  </div>
+</div>
+
+<main class="tutorial-page">
+
+<div class="tutorial-progress">
+
+  <div class="tutorial-progress-label">
+    <span>Tutorial Progress</span>
+    <span>Beginner → Advanced</span>
+  </div>
+
+  <div class="tutorial-progress-bar">
+    <span></span>
+  </div>
+
+</div>
+
+</section>
+</main>
+
+
+<div id="footer"></div>
+
+<script src="js/main.js"></script>
+
+
+<script type="module" src="js/Live.js"></script>
+<script src="js/components.js"></script>
+<div class="live-counter" id="liveCounter">
+  <span class="dot"></span>
+  Online: <span id="onlineCount">0</span>
+</div>
+</body>
+</html>
+
+

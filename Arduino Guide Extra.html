@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="icon" type="image/png" href="Images/Website-Guide.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arduino Guide - Extended</title>
+<link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+
+<div id="header"></div>
+
+<div id="rotateWarning">
+  <div class="rotate-box">
+    <h2>🔄 Rotate Device</h2>
+    <p>Only use in landscape mode!</p>
+  </div>
+</div>
+
+<main>
+
+<div class="mini-nav">
+  <a href="Arduino%20Guide%20Extra.html#more">Home</a>
+  <a href="Arduino%20Guide%20Extra.html#leds">LEDs</a>
+  <a href="Arduino%20Guide%20Extra.html#resistors">Resistors</a>
+  <a href="Arduino%20Guide%20Extra.html#capacitors">Capacitors</a>
+  <a href="Arduino%20Guide%20Extra.html#wires">Wires</a>
+  <a href="Arduino%20Guide%20Extra.html#pins-code">Pins</a>
+  <a href="Arduino%20Guide%20Extra.html#breadboards">Breadboards</a>
+</div>
+
+
+<!-- =========================================================
+     HOME
+========================================================= -->
+
+<section id="more" class="page active">
+
+  <h2>Arduino Guide Extended</h2>
+
+  <p style="opacity:0.8; margin-top:-10px;">
+    Extra explanations for the electronics behind Arduino.
+  </p>
+
+  <p>
+    The Arduino Guide Extended section goes deeper into the parts and
+    concepts that appear throughout Arduino projects.
+  </p>
+
+  <p>
+    Instead of treating electronics as a collection of disconnected parts,
+    this section explains <b>what each part does</b>, <b>why it is used</b>,
+    and <b>how it behaves inside a circuit</b>.
+  </p>
+
+  <p>
+    Start with <b>LEDs</b> to understand a simple output device,
+    then learn about <b>resistors</b>, <b>capacitors</b>, and
+    <b>wires</b>. After that, move into <b>Arduino pins and code</b>
+    and finally learn how <b>breadboards</b> physically connect circuits.
+  </p>
+
+  <p>
+    The sections are independent, so you do not have to read everything
+    in order. If you are looking for one specific component or concept,
+    use the navigation above.
+  </p>
+
+  <p>
+    Diagrams and interactive models are included where they make the
+    subject easier to understand. Images can be opened for a closer look,
+    while the breadboard section includes an interactive 3D model.
+  </p>
+
+  <p>
+    <b>Tip:</b> If you are completely new to electronics, start with
+    LEDs and resistors before moving into breadboards and pin programming.
+  </p>
+
+</section>
+
+
+<!-- =========================================================
+     LEDS
+========================================================= -->
+
+<section id="leds" class="page">
+
+  <h2>LEDs (Light Emitting Diodes)</h2>
+
+  <p>
+    An LED is a semiconductor device that produces light when current
+    flows through it in the correct direction.
+  </p>
+
+  <p>
+    LEDs are commonly used as indicators in Arduino projects because
+    they are inexpensive, small, efficient, and easy to control with code.
+  </p>
+
+  <h3>History</h3>
+
+  <p>
+    The first practical visible-spectrum LED was developed in 1962 by
+    Nick Holonyak Jr. Early LEDs mainly produced red light and were
+    commonly used as indicator lights.
+  </p>
+
+  <p>
+    Improvements in semiconductor materials later made many more colors
+    possible, including highly efficient white LEDs used in modern
+    lighting and displays.
+  </p>
+
+  <h3>How LEDs Work</h3>
+
+  <p>
+    An LED is a type of diode, so it is designed to conduct current
+    primarily in one direction.
+  </p>
+
+  <p>
+    On a typical through-hole LED, the longer leg is the
+    <b>anode (+)</b> and the shorter leg is the
+    <b>cathode (−)</b>.
+  </p>
+
+  <p>
+    Inside the semiconductor, electrons and holes recombine and release
+    energy as photons. This produces the visible light from the LED.
+  </p>
+
+  <div class="tut-box" data-tut="1">
+
+    <div class="tut-images one">
+      <img
+        src="Images/LED-Structure-Diagram.png"
+        class="tut-img"
+        alt="LED structure diagram">
+    </div>
+
+    <div class="tut-text">
+      Image source:
+      <a
+        class="next-link nl-blue nl-nounderline"
+        href="https://byjus.com/physics/light-emitting-diode/">
+        BYJU’S
+      </a>
+    </div>
+
+  </div>
+
+  <div style="height:5vh;"></div>
+
+  <details>
+    <summary>Usage and Applications</summary>
+
+    <ul>
+      <li>Indicator lights in electronics</li>
+      <li>Arduino status indicators</li>
+      <li>Displays and screens</li>
+      <li>Lighting systems</li>
+      <li>Automotive lighting</li>
+      <li>Optical communication</li>
+      <li>Decorative and wearable electronics</li>
+    </ul>
+
+  </details>
+
+  <div style="height:5vh;"></div>
+
+  <details>
+    <summary>Important Tips</summary>
+
+    <ul>
+      <li>
+        <b>Check polarity:</b> A typical through-hole LED has a longer
+        anode leg and shorter cathode leg.
+      </li>
+
+      <li>
+        <b>Use a current-limiting resistor:</b> An LED should normally
+        be used with an appropriate resistor when connected directly
+        to an Arduino output.
+      </li>
+
+      <li>
+        <b>Check the datasheet:</b> LED forward voltage and recommended
+        current vary between LEDs.
+      </li>
+
+      <li>
+        <b>Watch Arduino pin limits:</b> An Arduino pin should not be
+        treated as a general-purpose power supply.
+      </li>
+    </ul>
+
+  </details>
+
+  <div style="height:5vh;"></div>
+
+  <details>
+    <summary>Common Mistakes</summary>
+
+    <ul>
+      <li>Connecting an LED directly to a power source without current limiting</li>
+      <li>Reversing the LED polarity</li>
+      <li>Using an inappropriate resistor value</li>
+      <li>Drawing too much current from an Arduino pin</li>
+      <li>Assuming every LED has the same forward voltage</li>
+    </ul>
+
+  </details>
+
+  <div style="height:5vh;"></div>
+
+  <b>Remember:</b>
+
+  <p>
+    A typical LED has an <b>anode (+)</b> and a
+    <b>cathode (−)</b>.
+  </p>
+
+  <p>
+    When controlling an LED directly from an Arduino pin,
+    use an appropriate current-limiting resistor.
+  </p>
+
+</section>
+
+
+<!-- =========================================================
+     RESISTORS
+========================================================= -->
+
+<section id="resistors" class="page">
+
+  <h2>Resistors</h2>
+
+  <p>
+    A resistor is a passive electrical component that opposes current
+    flow. Resistors are used to control current, divide voltage,
+    establish signal levels, and protect other components.
+  </p>
+
+  <h3>History</h3>
+
+  <p>
+    The relationship between voltage, current, and resistance is described
+    by <b>Ohm's Law</b>, published by Georg Simon Ohm in 1827.
+  </p>
+
+  <p>
+    Modern resistors are manufactured in many forms and values, allowing
+    them to be used in everything from simple LED circuits to complex
+    electronic systems.
+  </p>
+
+  <h3>How Resistors Work</h3>
+
+  <p>
+    Resistance is measured in <b>ohms (Ω)</b>.
+    For a given voltage, increasing resistance reduces the amount of
+    current that flows.
+  </p>
+
+  <p>
+    A resistor also converts electrical energy into heat. The amount of
+    heat depends on the electrical power being dissipated, so the
+    resistor's power rating matters.
+  </p>
+
+  <div class="tut-box" data-tut="2">
+
+    <div class="tut-images one">
+      <img
+        src="Images/Resistor-color-code.png"
+        class="tut-img"
+        alt="Resistor color code chart">
+    </div>
+
+    <div class="tut-text">
+      Image source:
+      <a
+        class="next-link nl-blue nl-nounderline"
+        href="https://www.utmel.com/tools/band-resistor-color-code-calculator?id=20">
+        UTMEL
+      </a>
+    </div>
+
+  </div>
+
+  <div style="height:5vh;"></div>
+
+  <details>
+    <summary>Usage and Applications</summary>
+
+    <ul>
+      <li>Limiting current for LEDs</li>
+      <li>Creating voltage dividers</li>
+      <li>Pull-up and pull-down circuits</li>
+      <li>Setting transistor operating points</li>
+      <li>Signal conditioning</li>
+      <li>Filtering circuits</li>
+      <li>Protecting inputs and outputs</li>
+    </ul>
+
+  </details>
+
+  <div style="height:5vh;"></div>
+
+  <details>
+    <summary>Important Tips</summary>
+
+    <ul>
+      <li>
+        <b>Check the resistance:</b> Read the color bands or measure it
+        with a multimeter.
+      </li>
+
+      <li>
+        <b>Check the power rating:</b> A resistor must be able to safely
+        dissipate the power produced by the circuit.
+      </li>
+
+      <li>
+        <b>Check tolerance:</b> Resistance values are not always exact.
+      </li>
+
+      <li>
+        <b>Use Ohm's Law:</b> V = I × R can help determine an appropriate
+        resistance for many simple circuits.
+      </li>
+    </ul>
+
+  </details>
+
+  <div style="height:5vh;"></div>
+
+  <details>
+    <summary>Common Mistakes</summary>
+
+    <ul>
+      <li>Using the wrong resistance value</li>
+      <li>Ignoring the resistor's power rating</li>
+      <li>Reading the color bands incorrectly</li>
+      <li>Accidentally creating a short circuit around the resistor</li>
+      <li>Confusing series and parallel resistor arrangements</li>
+    </ul>
+
+  </details>
+
+  <div style="height:5vh;"></div>
+
+  <b>Remember:</b>
+
+  <p>
+    Resistors control current and voltage relationships inside a circuit.
+  </p>
+
+  <p>
+    For an LED circuit, the resistor is one of the most important
+    components protecting the LED and controlling its current.
+  </p>
+
+</section>
+
+
+<!-- =========================================================
+     CAPACITORS
+========================================================= -->
+
+<section id="capacitors" class="page">
+
+  <h2>Capacitors</h2>
+
+  <p>
+    A capacitor is a component that stores electrical energy in an
+    electric field. It can charge and discharge as the voltage across
+    it changes.
+  </p>
+
+  <p>
+    Capacitors are commonly used for filtering, decoupling, timing,
+    coupling signals, and short-term energy storage.
+  </p>
+
+  <h3>History</h3>
+
+  <p>
+    One of the earliest forms of capacitor was the <b>Leyden jar</b>,
+    developed during the 18th century.
+  </p>
+
+  <p>
+    Capacitor technology continued to develop into many different types,
+    including ceramic, film, tantalum, and electrolytic capacitors.
+  </p>
+
+  <h3>How Capacitors Work</h3>
+
+  <p>
+    A basic capacitor consists of two conductive surfaces separated by
+    an insulating material called a <b>dielectric</b>.
+  </p>
+
+  <p>
+    When voltage is applied, charge accumulates on the conductive
+    surfaces. The capacitor can later release stored energy back into
+    the circuit.
+  </p>
+
+  <div class="tut-box" data-tut="3">
+
+    <div class="tut-images one">
+      <img
+        src="Images/Capacitor-types.png"
+        class="tut-img"
+        alt="Different types of capacitors">
+    </div>
+
+    <div class="tut-text">
+      Image source:
+      <a
+        class="next-link nl-blue nl-nounderline"
+        href="https://www.aictech-inc.com/en/products/capacitors/">
+        aictech-inc.com
+      </a>
+    </div>
+
+  </div>
+
+  <div style="height:5vh;"></div>
+
+  <details>
+    <summary>Usage and Applications</summary>
+
+    <ul>
+      <li>Power supply filtering</li>
+      <li>Voltage decoupling near electronic components</li>
+      <li>Timing circuits</li>
+      <li>Signal coupling</li>
+      <li>Signal filtering</li>
+      <li>Short-term energy storage</li>
+      <li>Radio and frequency circuits</li>
+    </ul>
+
+  </details>
+
+  <div style="height:5vh;"></div>
+
+  <details>
+    <summary>Important Tips</summary>
+
+    <ul>
+      <li>
+        <b>Check polarity:</b> Many electrolytic capacitors are polarized
+        and must be connected correctly.
+      </li>
+
+      <li>
+        <b>Check voltage rating:</b> Do not exceed the capacitor's rated voltage.
+      </li>
+
+      <li>
+        <b>Choose the right type:</b> Different capacitor types have
+        different characteristics and applications.
+      </li>
+
+      <li>
+        <b>Watch stored energy:</b> Larger capacitors can retain charge
+        after power has been removed.
+      </li>
+    </ul>
+
+  </details>
+
+  <div style="height:5vh;"></div>
+
+  <details>
+    <summary>Common Mistakes</summary>
+
+    <ul>
+      <li>Reversing a polarized capacitor</li>
+      <li>Exceeding the voltage rating</li>
+      <li>Using the wrong capacitance value</li>
+      <li>Ignoring capacitor type and polarity</li>
+      <li>Assuming a capacitor immediately has zero charge after power is removed</li>
+    </ul>
+
+  </details>
+
+  <div style="height:5vh;"></div>
+
+  <b>Remember:</b>
+
+  <p>
+    Capacitors store electrical energy and can help stabilize and filter
+    voltages in electronic circuits.
+  </p>
+
+  <p>
+    Always check the capacitor's value, type, and voltage rating before
+    using it.
+  </p>
+
+</section>
+
+
+<!-- =========================================================
+     WIRES
+========================================================= -->
+
+<section id="wires" class="page">
+
+  <h2>Wires</h2>
+
+  <p>
+    Wires provide conductive paths between components in an electronic
+    circuit. Without these paths, electrical current and signals cannot
+    travel between the different parts of the circuit.
+  </p>
+
+  <h3>History</h3>
+
+  <p>
+    Copper became one of the most widely used materials for electrical
+    wiring because it has high electrical conductivity and is relatively
+    easy to work with.
+  </p>
+
+  <p>
+    Modern wires use insulating materials and standardized sizes to make
+    electrical systems safer and easier to build.
+  </p>
+
+  <h3>How Wires Work</h3>
+
+  <p>
+    A wire provides a low-resistance path for electrical current.
+    Its resistance depends on factors such as its material, length,
+    and cross-sectional area.
+  </p>
+
+  <p>
+    Wire size is often described using a <b>gauge</b>. In common
+    American Wire Gauge (AWG) numbering, a smaller gauge number means
+    a thicker wire.
+  </p>
+
+  <div class="tut-box" data-tut="4">
+
+    <div class="tut-images one">
+      <img
+        src="Images/Wire-Gauge.png"
+        class="tut-img"
+        alt="Common wire gauge sizes">
+    </div>
+
+    <div class="tut-text">
+      Image source:
+      <a
+        class="next-link nl-blue nl-nounderline"
+        href="https://www.nachi.org/gallery/general-8/common-awg-wire-sizes">
+        InterNACHI
+      </a>
+    </div>
+
+  </div>
+
+  <div style="height:5vh;"></div>
+
+  <details>
+    <summary>Usage and Applications</summary>
+
+    <ul>
+      <li>Connecting Arduino boards to components</li>
+      <li>Breadboard prototyping</li>
+      <li>Power connections</li>
+      <li>Signal connections</li>
+      <li>Data and communication wiring</li>
+      <li>Ground connections</li>
+      <li>Internal device wiring</li>
+    </ul>
+
+  </details>
+
+  <div style="height:5vh;"></div>
+
+  <details>
+    <summary>Important Tips</summary>
+
+    <ul>
+      <li>
+        <b>Choose an appropriate wire size:</b> Higher-current circuits
+        may require thicker conductors.
+      </li>
+
+      <li>
+        <b>Protect the conductor:</b> Insulation helps prevent accidental
+        shorts and contact with other conductors.
+      </li>
+
+      <li>
+        <b>Keep wiring organized:</b> Consistent colors and routing make
+        circuits easier to understand and debug.
+      </li>
+
+      <li>
+        <b>Consider wire length:</b> Long wires have more resistance and
+        can introduce voltage drop or signal problems.
+      </li>
+    </ul>
+
+  </details>
+
+  <div style="height:5vh;"></div>
+
+  <details>
+    <summary>Common Mistakes</summary>
+
+    <ul>
+      <li>Using a wire that is unsuitable for the current</li>
+      <li>Using damaged insulation</li>
+      <li>Leaving connections loose</li>
+      <li>Accidentally connecting power and ground together</li>
+      <li>Creating unnecessarily long or confusing wiring paths</li>
+    </ul>
+
+  </details>
+
+  <div style="height:5vh;"></div>
+
+  <b>Remember:</b>
+
+  <p>
+    Wires create the electrical paths that connect the components of
+    your circuit.
+  </p>
+
+  <p>
+    In an Arduino project, a good wiring layout can make debugging
+    dramatically easier.
+  </p>
+
+</section>
+
+
+<!-- =========================================================
+     PINS AND CODE
+========================================================= -->
+
+<section id="pins-code" class="page">
+
+  <h2>Using Arduino Pins in Code</h2>
+
+  <p>
+    Arduino code controls hardware through <b>pin numbers</b>.
+    Instead of writing code such as "turn on the LED", you normally
+    tell the Arduino which physical pin should be controlled.
+  </p>
+
+  <h3>How Pin Numbers Work</h3>
+
+  <p>
+    On the classic Arduino Uno, the board provides digital pins
+    <b>D0–D13</b> and analog input pins <b>A0–A5</b>.
+  </p>
+
+  <p>
+    Some pins have additional functions. For example, several digital
+    pins support PWM, while A4 and A5 are also used for I²C communication.
+  </p>
+
+  <div class="tut-box" data-tut="5">
+
+    <div class="tut-images one">
+      <img
+        src="Images/Arduino-uno-Pins.png"
+        class="tut-img"
+        alt="Arduino Uno pin diagram">
+    </div>
+
+    <div class="tut-text">
+      Red = Power, Blue = Digital, Purple = Analog
+    </div>
+
+  </div>
+
+  <div style="height:5vh;"></div>
+
+  <details>
+    <summary>Basic Pin Functions</summary>
+
+    <ul>
+      <li>
+        <b>pinMode(pin, mode)</b> → Configures a pin as INPUT,
+        OUTPUT, or INPUT_PULLUP.
+      </li>
+
+      <li>
+        <b>digitalWrite(pin, value)</b> → Sets a digital output HIGH or LOW.
+      </li>
+
+      <li>
+        <b>digitalRead(pin)</b> → Reads a digital input as HIGH or LOW.
+      </li>
+
+      <li>
+        <b>analogRead(pin)</b> → Reads an analog input, normally from
+        0 to 1023 on the classic Uno's 10-bit ADC.
+      </li>
+
+      <li>
+        <b>analogWrite(pin, value)</b> → Produces PWM output on supported
+        pins, with a value from 0 to 255 on the classic Uno.
+      </li>
+    </ul>
+
+  </details>
+
+  <div style="height:5vh;"></div>
+
+  <details>
+    <summary>Example: LED on Pin 13</summary>
+
+<pre>int led = 13;
+
+void setup() {
+    pinMode(led, OUTPUT);
+}
+
+void loop() {
+    digitalWrite(led, HIGH);
+    delay(500);
+
+    digitalWrite(led, LOW);
+    delay(500);
+}</pre>
+
+  </details>
+
+  <div style="height:5vh;"></div>
+
+  <details>
+    <summary>Using Analog Pins</summary>
+
+    <ul>
+      <li><b>analogRead(A0)</b> → Reads an analog input</li>
+      <li><b>A4</b> → SDA for I²C on the classic Uno</li>
+      <li><b>A5</b> → SCL for I²C on the classic Uno</li>
+      <li><b>A0–A5</b> can also be used as digital I/O on the classic Uno</li>
+    </ul>
+
+    <p>
+      On the classic Uno, A0 corresponds to digital pin 14,
+      A1 to 15, and so on. Using the A0–A5 names is usually clearer
+      when working with analog inputs.
+    </p>
+
+  </details>
+
+  <div style="height:5vh;"></div>
+
+  <details>
+    <summary>PWM Pins (~)</summary>
+
+    <p>
+      On the classic Arduino Uno, pins marked with a <b>~</b> support
+      PWM output.
+    </p>
+
+    <ul>
+      <li>~3</li>
+      <li>~5</li>
+      <li>~6</li>
+      <li>~9</li>
+      <li>~10</li>
+      <li>~11</li>
+    </ul>
+
+    <p>
+      The classic Arduino Uno uses values from <b>0–255</b> with
+      <b>analogWrite()</b>.
+    </p>
+
+  </details>
+
+  <div style="height:5vh;"></div>
+
+  <details>
+    <summary>Common Mistakes</summary>
+
+    <ul>
+      <li>Forgetting to configure a pin with pinMode()</li>
+      <li>Using the wrong physical pin number</li>
+      <li>Expecting analogRead() to work on every digital pin</li>
+      <li>Forgetting that A0–A5 can also be digital pins on the classic Uno</li>
+      <li>Using pins 0 and 1 while relying on the USB serial connection</li>
+      <li>Exceeding the electrical limits of an Arduino pin</li>
+    </ul>
+
+  </details>
+
+  <div style="height:5vh;"></div>
+
+  <b>Remember:</b>
+
+  <p>
+    The number in your code must correspond to the pin you actually
+    connect to on the Arduino.
+  </p>
+
+  <p>
+    Always check the board's pin capabilities before using a special
+    function such as PWM, I²C, or serial communication.
+  </p>
+
+</section>
+
+
+<!-- =========================================================
+     BREADBOARDS
+========================================================= -->
+
+<section id="breadboards" class="page">
+
+  <h2>Breadboards</h2>
+
+  <h3>
+    How a breadboard looks:
+    <a
+      class="next-link nl-blue nl-nounderline"
+      href="#breadboard-3d">
+      3D Breadboard
+    </a>
+  </h3>
+
+  <h3>
+    How a breadboard works:
+    <a
+      class="next-link nl-blue nl-nounderline"
+      href="#breadboard-how">
+      More on How
+    </a>
+  </h3>
+
+  <p>
+    A breadboard is a reusable prototyping board that allows electronic
+    circuits to be assembled without soldering.
+  </p>
+
+  <p>
+    Breadboards are especially useful for Arduino because components can
+    be inserted, removed, and rearranged quickly while experimenting.
+  </p>
+
+  <h3>History</h3>
+
+  <p>
+    The name "breadboard" comes from early electronics experiments where
+    hobbyists and engineers sometimes mounted components on wooden boards.
+    Modern solderless breadboards are very different: they use spring
+    contacts underneath a plastic board to create temporary electrical
+    connections.
+  </p>
+
+  <h3>How the Connections Work</h3>
+
+  <p>
+    The holes on a breadboard are not all connected together.
+    Hidden metal contacts connect specific groups of holes.
+  </p>
+
+  <p>
+    When a component leg or jumper wire is inserted into one of those
+    connected holes, it becomes electrically connected to the other holes
+    in that group.
+  </p>
+
+  <div class="tut-box" data-tut="6">
+
+    <div class="tut-images one">
+      <img
+        src="Images/Breadboard1.png"
+        class="tut-img"
+        alt="Breadboard layout">
+    </div>
+
+  </div>
+
+  <div style="height:5vh;"></div>
+
+  <details>
+    <summary>Power Rails</summary>
+
+    <p>
+      Many breadboards have long power rails along their sides.
+      They are commonly marked with red (+) and blue or black (−) lines.
+    </p>
+
+    <ul>
+      <li>Red rail → commonly used for positive supply voltage</li>
+      <li>Blue/black rail → commonly used for GND</li>
+      <li>Some breadboards have rails that are split in the middle</li>
+      <li>Rail markings do not automatically provide power</li>
+    </ul>
+
+  </details>
+
+  <div style="height:5vh;"></div>
+
+  <details>
+    <summary>Center Rows</summary>
+
+    <p>
+      The center area is normally divided into two groups of five
+      electrically connected holes, separated by a central gap.
+    </p>
+
+    <ul>
+      <li>Each group of five holes is electrically connected</li>
+      <li>The two sides of the center gap are separate</li>
+      <li>The center gap is useful for DIP ICs</li>
+      <li>Components can bridge separate electrical groups</li>
+    </ul>
+
+  </details>
+
+  <div style="height:5vh;"></div>
+
+  <details>
+    <summary>Usage and Applications</summary>
+
+    <ul>
+      <li>Arduino prototyping</li>
+      <li>Learning electronics</li>
+      <li>Testing circuits</li>
+      <li>Quick hardware experiments</li>
+      <li>Debugging circuits</li>
+      <li>Classroom projects</li>
+      <li>Temporary prototypes</li>
+    </ul>
+
+  </details>
+
+  <div style="height:5vh;"></div>
+
+  <details>
+    <summary>Important Tips</summary>
+
+    <ul>
+      <li>Learn the internal connection pattern before wiring a circuit</li>
+      <li>Check whether power rails are split</li>
+      <li>Keep power and ground clearly identified</li>
+      <li>Use short jumper wires where practical</li>
+      <li>Check every connection before applying power</li>
+      <li>Do not assume two physically close holes are electrically connected</li>
+    </ul>
+
+  </details>
+
+  <div style="height:5vh;"></div>
+
+  <details>
+    <summary>Common Mistakes</summary>
+
+    <ul>
+      <li>Assuming every hole is connected</li>
+      <li>Assuming power rails are connected across their entire length</li>
+      <li>Putting both legs of a component into the same connected group</li>
+      <li>Accidentally connecting power directly to ground</li>
+      <li>Forgetting that some breadboards have split rails</li>
+    </ul>
+
+  </details>
+
+  <div style="height:5vh;"></div>
+
+  <b>Remember:</b>
+
+  <p>
+    A breadboard does not create power. It only provides temporary
+    electrical connections between components and wires.
+  </p>
+
+</section>
+
+
+<!-- =========================================================
+     BREADBOARD DETAILS
+========================================================= -->
+
+<section id="breadboard-how" class="page">
+
+  <h2>How Breadboards Work (In Detail)</h2>
+
+  <p>
+    The easiest way to understand a breadboard is to imagine that every
+    visible hole is connected to a hidden metal contact underneath.
+  </p>
+
+  <p>
+    When you insert a wire or component leg, the spring contact grips it
+    and connects it electrically to the other holes belonging to the same
+    contact group.
+  </p>
+
+  <h3>Internal Connections</h3>
+
+  <p>
+    The exact layout varies between breadboard models, but a typical
+    solderless breadboard has two main areas:
+  </p>
+
+  <ul>
+    <li>Center terminal strips for components</li>
+    <li>Longer power rails for distributing supply and ground</li>
+  </ul>
+
+  <div class="tut-box" data-tut="7">
+
+    <div class="tut-images one">
+      <img
+        src="Images/Breadboard.png"
+        class="tut-img"
+        alt="Breadboard internal connection layout">
+    </div>
+
+  </div>
+
+  <div style="height:5vh;"></div>
+
+  <details>
+    <summary>Row Connections</summary>
+
+    <p>
+      In a typical breadboard, a group of five holes in the center area
+      shares one electrical connection.
+    </p>
+
+    <ul>
+      <li>The five holes form one connected group</li>
+      <li>The group on the opposite side of the center gap is separate</li>
+      <li>The center gap prevents the two sides from becoming one connection</li>
+      <li>This arrangement makes DIP ICs easy to place across the gap</li>
+    </ul>
+
+  </details>
+
+  <div style="height:5vh;"></div>
+
+  <details>
+    <summary>Power Distribution</summary>
+
+    <p>
+      Power rails allow a supply voltage and ground connection to be
+      distributed along the board.
+    </p>
+
+    <ul>
+      <li>Positive rail is commonly marked red</li>
+      <li>Ground rail is commonly marked blue or black</li>
+      <li>Some rails are split into separate electrical sections</li>
+      <li>A wire must connect a rail to the actual power source</li>
+    </ul>
+
+  </details>
+
+  <div style="height:5vh;"></div>
+
+  <details>
+    <summary>Why Breadboards Are Useful for Learning</summary>
+
+    <ul>
+      <li>No soldering is required</li>
+      <li>Components can be moved easily</li>
+      <li>Circuits can be changed quickly</li>
+      <li>Errors can often be corrected without replacing the board</li>
+      <li>The same board can be reused for many experiments</li>
+    </ul>
+
+  </details>
+
+  <div style="height:5vh;"></div>
+
+  <details>
+    <summary>Limitations</summary>
+
+    <ul>
+      <li>Not intended for high-current applications</li>
+      <li>Not ideal for many high-frequency circuits</li>
+      <li>Loose connections can cause intermittent problems</li>
+      <li>Parasitic capacitance and resistance can affect sensitive circuits</li>
+      <li>They are less mechanically secure than soldered connections</li>
+    </ul>
+
+  </details>
+
+  <div style="height:5vh;"></div>
+
+  <b>Important:</b>
+
+  <p>
+    Breadboards are excellent for prototyping and learning, but a final
+    project may need a more permanent and reliable construction method,
+    such as a perfboard or PCB.
+  </p>
+
+</section>
+
+
+<!-- =========================================================
+     BREADBOARD 3D
+========================================================= -->
+
+<section id="breadboard-3d" class="page">
+
+  <h2>Breadboard 3D View</h2>
+
+  <p>
+    A 3D model gives you another way to understand the physical structure
+    of a breadboard.
+  </p>
+
+  <p>
+    Rotate and zoom the model to inspect the hole layout, center gap,
+    power rails, and overall shape of the board.
+  </p>
+
+  <div style="height:5vh;"></div>
+
+  <div id="uno3d-wrap">
+
+    <model-viewer
+      src="3D/arduino_breadboard.glb"
+      alt="Interactive 3D model of a breadboard"
+      auto-rotate
+      camera-controls
+      exposure="1"
+      shadow-intensity="0.6"
+      style="width:100%; height:100%; background:transparent;">
+    </model-viewer>
+
+  </div>
+
+  <div style="height:5vh;"></div>
+
+  <details>
+    <summary>What to Look For</summary>
+
+    <ul>
+      <li>Center gap</li>
+      <li>Groups of connected holes</li>
+      <li>Side power rails</li>
+      <li>Hole spacing</li>
+      <li>Physical component placement</li>
+      <li>Overall board layout</li>
+    </ul>
+
+  </details>
+
+  <div style="height:5vh;"></div>
+
+  <details>
+    <summary>Learning Tip</summary>
+
+    <p>
+      Compare the 3D model with the breadboard diagrams in this section.
+      Try identifying the center gap and the different groups of holes
+      before building your own circuit.
+    </p>
+
+  </details>
+
+  <div style="height:5vh;"></div>
+
+  <p>
+    <i>
+      Tip: Once the physical layout makes sense, wiring diagrams become
+      much easier to understand.
+    </i>
+  </p>
+
+</section>
+
+
+<!-- =========================================================
+     404
+========================================================= -->
+
+<section id="notfound" class="page">
+
+  <h2>404 – Page Not Found</h2>
+
+  <p>
+    The section you tried to open does not exist.
+  </p>
+
+  <button onclick="goHome()">Go Home</button>
+
+</section>
+
+</main>
+
+
+<div id="footer"></div>
+
+<script
+  type="module"
+  src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
+</script>
+
+<script src="js/main.js"></script>
+<script type="module" src="js/Live.js"></script>
+<script src="js/components.js"></script>
+
+<div class="live-counter" id="liveCounter">
+  <span class="dot"></span>
+  Online: <span id="onlineCount">0</span>
+</div>
+
+<div id="zoomOverlay" class="zoom-overlay">
+  <img id="zoomImg" alt="Zoomed image">
+</div>
+
+</body>
+</html>

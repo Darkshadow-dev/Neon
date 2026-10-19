@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="Images/Website-Guide.png">
+
+<title>Arduino Guide</title>
+
+<link rel="stylesheet" href="css/main.css">
+<style>
+/* ================= CLI ERROR CARD ================= */
+
+.cli-error-card{
+
+background:
+linear-gradient(
+145deg,
+#ffffff,
+#eef8ff
+);
+
+border-radius:22px;
+
+padding:24px;
+
+margin:20px auto;
+
+max-width:900px;
+
+box-shadow:
+0 12px 30px rgba(0,0,0,.12);
+
+border:1px solid #cdeeff;
+
+animation:fadeBlock .5s ease;
+
+}
+
+
+/* HEADER */
+
+.cli-header{
+
+display:flex;
+
+align-items:center;
+
+gap:8px;
+
+padding-bottom:15px;
+
+border-bottom:1px solid #d8efff;
+
+}
+
+
+.cli-header h2{
+
+margin-left:10px;
+
+font-size:22px;
+
+}
+
+
+.cli-dot{
+
+width:14px;
+height:14px;
+
+border-radius:50%;
+
+}
+
+
+.cli-dot.red{
+background:#ff5252;
+}
+
+.cli-dot.yellow{
+background:#ffd740;
+}
+
+.cli-dot.green{
+background:#00c853;
+}
+
+
+
+/* ERROR BOX */
+
+.error-info{
+
+margin:18px 0;
+
+padding:16px;
+
+background:#fff3f3;
+
+border-left:5px solid #ff5252;
+
+border-radius:14px;
+
+line-height:1.6;
+
+}
+
+
+/* TERMINAL STYLE */
+
+.terminal{
+
+background:
+linear-gradient(
+145deg,
+#081018,
+#122533
+);
+
+color:#9dffcf;
+
+border:
+1px solid rgba(0,255,150,.2);
+
+}
+
+
+.terminal pre{
+
+color:#ffb3b3;
+
+}
+
+
+/* FIX COMMAND */
+
+.fix{
+
+border:
+1px solid rgba(0,200,83,.35);
+
+}
+
+
+.fix pre{
+
+color:#9dffcf;
+
+}
+
+
+
+/* TIP */
+
+.tip-card{
+
+margin-top:20px;
+
+padding:16px;
+
+background:#eafff1;
+
+border-left:5px solid var(--accent2);
+
+border-radius:14px;
+
+line-height:1.6;
+
+}
+
+
+.tip-card code{
+
+background:#d5ffe5;
+
+padding:3px 7px;
+
+border-radius:6px;
+
+font-family:monospace;
+
+color:#007a35;
+
+}
+
+
+
+/* MOBILE */
+
+@media(max-width:700px){
+
+.cli-error-card{
+
+padding:16px;
+
+}
+
+.cli-header h2{
+
+font-size:18px;
+
+}
+
+}
+.quick-links{
+
+max-width:1000px;
+
+margin:30px auto;
+
+padding:25px;
+
+background:linear-gradient(145deg,#ffffff,#eef8ff);
+
+border-radius:20px;
+
+border:1px solid #cdeeff;
+
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+text-align:center;
+
+}
+
+.quick-links h2{
+
+margin-bottom:10px;
+
+}
+
+.quick-links p{
+
+margin-bottom:20px;
+
+color:#555;
+
+}
+
+.quick-btn{
+
+display:inline-block;
+
+margin:8px;
+
+padding:12px 18px;
+
+border-radius:12px;
+
+background:linear-gradient(145deg,var(--accent),var(--accent2));
+
+color:white;
+
+text-decoration:none;
+
+font-weight:bold;
+
+transition:.25s;
+
+box-shadow:0 5px 12px rgba(0,0,0,.15);
+
+}
+
+.quick-btn:hover{
+
+transform:translateY(-3px);
+
+box-shadow:0 8px 18px rgba(0,0,0,.2);
+
+}
+
+.quick-btn:active{
+
+transform:scale(.96);
+
+}
+</style>
+</head>
+<body>
+
+<div id="header"></div>
+
+<main>
+
+<section id="important" class="page active">
+<h1>Arduino Error Guide</h1>
+
+<p>
+This page explains the most common Arduino IDE and Arduino CLI errors.
+Click any button below to jump directly to an error, see an example,
+learn why it happens, and discover the quickest way to fix it.
+Whether you're using an official Arduino board or a clone, these
+solutions cover the problems beginners and experienced users encounter
+most often.
+</p>
+
+<div class="style:5vh"></div>
+<div class="cli-error-card">
+
+  <div class="cli-header">
+    <span class="cli-dot red"></span>
+    <span class="cli-dot yellow"></span>
+    <span class="cli-dot green"></span>
+    <h2 id="upload-error">Arduino CLI Upload Error</h2>
+  </div>
+
+
+  <div class="error-info">
+    <b>Error:</b> Programmer is not responding.<br>
+    This usually happens because of wrong upload speed, wrong COM port,
+    missing driver, or a clone Arduino board using a different bootloader.
+  </div>
+
+
+  <div class="code-block terminal">
+
+<button class="copy-btn"
+onclick="copyCmd(this.parentElement.querySelector('pre'))">
+Copy
+</button>
+
+<pre>
+arduino-cli upload -p COM5 --fqbn arduino:avr:uno blink
+
+Error: programmer is not responding
+Warning: attempt 1 of 10: not in sync: resp=0x00
+
+Error: unable to open port COM5 for programmer arduino
+
+Failed uploading: upload error: exit status 1
+</pre>
+
+</div>
+
+
+<h3 class="fix-title">Try this fix:</h3>
+
+
+<div class="code-block fix">
+
+<button class="copy-btn"
+onclick="copyCmd(this.parentElement.querySelector('pre'))">
+Copy
+</button>
+
+<pre>
+arduino-cli upload -p COM5 --fqbn arduino:avr:uno --upload-property upload.speed=57600 blink
+</pre>
+
+</div>
+
+
+<div class="tip-card">
+<b>Why this works:</b>
+<br>
+Many cheap Arduino UNO clones use a slower bootloader speed.
+The normal UNO uses <code>115200</code>, but some CH340/clone boards
+work better with <code>57600</code>.
+</div>
+
+
+</div>
+<div class="style:5vh"></div>
+<div class="cli-error-card">
+
+<div class="cli-header">
+<span class="cli-dot red"></span>
+<span class="cli-dot yellow"></span>
+<span class="cli-dot green"></span>
+<h2 id="access-denied">Access is Denied</h2>
+</div>
+
+<div class="error-info">
+<b>Error:</b> Windows is preventing Arduino CLI from using the serial port.
+</div>
+
+<div class="code-block terminal">
+<button class="copy-btn" onclick="copyCmd(this.parentElement.querySelector('pre'))">Copy</button>
+<pre>
+Error:
+unable to read:
+Access is denied.
+</pre>
+</div>
+
+<div class="tip-card">
+
+<b>Usually caused by</b>
+
+<ul>
+<li>Serial Monitor still open</li>
+<li>Arduino IDE using the port</li>
+<li>Another terminal program</li>
+<li>USB disconnected while uploading</li>
+</ul>
+
+</div>
+
+</div>
+<div class="style:5vh"></div>
+<div class="cli-error-card">
+
+<div class="cli-header">
+<span class="cli-dot red"></span>
+<span class="cli-dot yellow"></span>
+<span class="cli-dot green"></span>
+<h2 id="open-port">Unable to Open Port</h2>
+</div>
+
+<div class="error-info">
+<b>Error:</b> Arduino CLI could not connect to the selected COM port.
+</div>
+
+<div class="code-block terminal">
+<button class="copy-btn" onclick="copyCmd(this.parentElement.querySelector('pre'))">Copy</button>
+<pre>
+Error:
+unable to open port COM5
+</pre>
+</div>
+
+<div class="tip-card">
+
+<b>Check</b>
+
+<ul>
+<li>Correct COM port</li>
+<li>USB cable connected</li>
+<li>Driver installed</li>
+<li>Board powered</li>
+</ul>
+
+</div>
+
+</div>
+<div class="style:5vh"></div>
+<div class="cli-error-card">
+
+<div class="cli-header">
+<span class="cli-dot red"></span>
+<span class="cli-dot yellow"></span>
+<span class="cli-dot green"></span>
+<h2 id="missing-fqbn">Missing FQBN</h2>
+</div>
+
+<div class="error-info">
+<b>Error:</b> Arduino CLI does not know which board you are compiling for.
+</div>
+
+<div class="code-block terminal">
+<button class="copy-btn" onclick="copyCmd(this.parentElement.querySelector('pre'))">Copy</button>
+<pre>
+Error:
+Missing FQBN
+</pre>
+</div>
+
+<div class="tip-card">
+
+Always add
+
+<code>
+--fqbn arduino:avr:uno
+</code>
+
+or the correct board name.
+
+</div>
+
+</div>
+<div class="style:5vh"></div>
+<div class="cli-error-card">
+
+<div class="cli-header">
+<span class="cli-dot red"></span>
+<span class="cli-dot yellow"></span>
+<span class="cli-dot green"></span>
+<h2 id="sketch-large">Sketch Too Large</h2>
+</div>
+
+<div class="error-info">
+<b>Error:</b> Your program is larger than the Arduino's flash memory.
+</div>
+
+<div class="code-block terminal">
+<button class="copy-btn" onclick="copyCmd(this.parentElement.querySelector('pre'))">Copy</button>
+<pre>
+Sketch uses
+33210 bytes
+
+Maximum is
+32256 bytes
+</pre>
+</div>
+
+<div class="tip-card">
+
+Try
+
+<ul>
+<li>Remove unused libraries</li>
+<li>Store text in PROGMEM</li>
+<li>Use smaller images/fonts</li>
+<li>Optimize code</li>
+</ul>
+
+</div>
+
+</div>
+<div class="style:5vh"></div>
+<div class="cli-error-card">
+
+<div class="cli-header">
+<span class="cli-dot red"></span>
+<span class="cli-dot yellow"></span>
+<span class="cli-dot green"></span>
+<h2 id="library-missing">Library Missing</h2>
+</div>
+
+<div class="error-info">
+<b>Error:</b> The required library could not be found.
+</div>
+
+<div class="code-block terminal">
+<button class="copy-btn" onclick="copyCmd(this.parentElement.querySelector('pre'))">Copy</button>
+<pre>
+fatal error:
+
+Servo.h:
+
+No such file
+or directory
+</pre>
+</div>
+
+<div class="tip-card">
+
+Install the required library or check that the filename is spelled correctly.
+
+</div>
+
+</div>
+<div class="style:5vh"></div>
+<div class="cli-error-card">
+
+<div class="cli-header">
+<span class="cli-dot red"></span>
+<span class="cli-dot yellow"></span>
+<span class="cli-dot green"></span>
+<h2 id="variable-scope">Variable Not Declared</h2>
+</div>
+
+<div class="error-info">
+<b>Error:</b> The compiler found a variable name that doesn't exist.
+</div>
+
+<div class="code-block terminal">
+<button class="copy-btn" onclick="copyCmd(this.parentElement.querySelector('pre'))">Copy</button>
+<pre>
+'ledPin'
+
+was not declared
+
+in this scope
+</pre>
+</div>
+
+<div class="tip-card">
+
+Usually caused by
+
+<ul>
+<li>Spelling mistakes</li>
+<li>Variable declared inside another function</li>
+<li>Missing declaration</li>
+</ul>
+
+</div>
+
+</div>
+<div class="style:5vh"></div>
+<div class="cli-error-card">
+
+<div class="cli-header">
+<span class="cli-dot red"></span>
+<span class="cli-dot yellow"></span>
+<span class="cli-dot green"></span>
+<h2 id="semicolon">Missing Semicolon</h2>
+</div>
+
+<div class="error-info">
+<b>Error:</b> The compiler expected a semicolon before continuing.
+</div>
+
+<div class="code-block terminal">
+<button class="copy-btn" onclick="copyCmd(this.parentElement.querySelector('pre'))">Copy</button>
+<pre>
+expected ';'
+
+before
+</pre>
+</div>
+
+<div class="tip-card">
+
+Check the line above the error. A missing semicolon often causes the compiler to report the error on the next line.
+
+</div>
+
+</div>
+</section>
+
+<section id="notfound" class="page">
+    <h2>404 – Page Not Found</h2>
+    <p>The section you tried to open does not exist.</p>
+    <button onclick="goHome()">Go Home</button>
+</section>
+
+</main>
+
+<div id="footer"></div>
+
+<script src="js/main.js"></script>
+
+<script type="module" src="js/Live.js"></script>
+<div class="live-counter" id="liveCounter">
+  <span class="dot"></span>
+  Online: <span id="onlineCount">0</span>
+</div>
+<div id="copyPopup">Copied!</div>
+</main>
+<script>
+
+function copyCmd(el){
+
+const cmd = el.innerText;
+
+navigator.clipboard.writeText(cmd);
+
+showPopup("Text copied");
+
+}
+
+
+function copyCompile(name){
+
+const cmd =
+`arduino-cli compile --fqbn arduino:avr:uno ${name}`;
+
+navigator.clipboard.writeText(cmd);
+
+showPopup("Compile command copied");
+
+}
+
+function copyUpload(name){
+
+const port = document.getElementById("comPort").value;
+
+const cmd =
+`arduino-cli upload -p ${port} --fqbn arduino:avr:uno ${name}`;
+
+navigator.clipboard.writeText(cmd);
+
+showPopup("Upload command copied");
+}
+
+function showPopup(text){
+  const popup = document.getElementById("copyPopup");
+  popup.textContent = text;
+  popup.classList.add("show");
+
+  setTimeout(()=>{
+    popup.classList.remove("show");
+  },3000);
+}
+
+</script>
+
+<script src="js/components.js"></script>
+</body>
+</html>
+
+</body>
+</html>
+
+
+
